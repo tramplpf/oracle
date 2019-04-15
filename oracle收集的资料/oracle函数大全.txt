@@ -1,0 +1,3590 @@
+Oracle 函数大全
+ 
+
+F.1字符函数——返回字符值
+
+ 
+
+(chr,concat,initcap,lower,lpad/rpad,nls_initcap,nls_lower,nls_upper,regexp_replace,regexp_substr,replace,trim/ltrim/rtrim,soundex,substr,translate,upper)
+
+ 
+
+说明：可以sql和plsql中使用
+
+ 
+
+ 
+
+CHR
+
+语法:  chr(x)
+
+功能：给出整数X，返回对应的ASCII码字符。CHR和ASCII是一对反函数。
+
+SQL> select chr(54740) 别名1,chr(65) 别名2 from dual;
+
+ 
+
+别名1  别名2
+
+赵       A
+
+--------------------------------------------------
+
+ 
+
+CONCAT
+
+语法： CONCAT（string1,string2）
+
+功能：连接两个字符串
+
+SQL> select concat('010-','88888888')||'23'  连接 from dual;
+
+ 
+
+连接
+
+010-8888888823
+
+--------------------------------------------------
+
+ 
+
+INITCAP
+
+语法：INITCAP（string）
+
+功能：返回字符单词首字母大写，其余小写，单词用空格和非字母字符分隔。
+
+SQL> select initcap('smith hEllo') upp from dual;
+
+ 
+
+UPP
+
+Smith Hello
+
+ 
+
+--------------------------------------------------
+
+ 
+
+LOWER
+
+    语法：LOWER(string)
+
+     功能：所以字母小写
+
+     SQL> select lower('AaBbCcDd') AaBbCcDd from dual;
+
+ 
+
+     AaBbCcDd
+
+     aabbccdd
+
+--------------------------------------------------
+
+ 
+
+LPAD/RPAD
+
+语法：LPAD/RPAD（string1,x[,string2]）
+
+功能：在string1字符左边或右边粘贴数个string2字符，直到字符总字节数达到x字节。string2默认为空格。
+
+如果string2的长度要比X字符少，就按照需要进行复制。如果string2多于X字符，则仅string2前面的X各字符被使用。如果string1长度大于x,则返回string1左端x个字符。
+
+ 
+
+RPAD  在列的右边粘贴字符
+
+LPAD  在列的左边粘贴字符
+
+SQL> select lpad(rpad('gao',10,'*'),17,'*')from dual;
+
+ 
+
+LPAD(RPAD('GAO',1
+
+*******gao*******
+
+不够字符则用*来填满
+
+--------------------------------------------------
+
+ 
+
+NLS_INITCAP
+
+语法：NLS_INITCAP（string[,nlsparams]）
+
+功能：返回字符串每个单词第一个字母大写而单词中的其他字母小写的string，nlsparams
+
+指定了不同于该会话缺省值的不同排序序列。如果不指定参数，则功能和INITCAP相同。Nlsparams可以使用的形式是：‘NLS_SORT=sort’ 这里sort制订了一个语言排序序列。
+
+--------------------------------------------------
+
+ 
+
+NLS_LOWER
+
+语法：NLS_LOWER（string[,nlsparams]）
+
+功能：返回字符串中的所有字母都是小写形式的string。不是字母的字符不变。
+
+Nlsparams参数的形式与用途和NLS_INITCAP中的nlsparams参数是相同的。如果nlsparams没有被包含，那么NLS_LOWER所作的处理和LOWER相同。
+
+--------------------------------------------------
+
+ 
+
+NLS_UPPER
+
+语法：NLS_UPPER（string[,nlsparams]）
+
+功能：返回字符串中的所有字母都是大写的形式的string。不是字母的字符不变。nlsparams参数的形式与用途和NLS_INITCAP中的相同。如果没有设定参数，则NLS_UPPER功能和UPPER相同。
+
+使用位置：过程性语句和SQL语句。
+
+--------------------------------------------------
+
+ 
+
+REGEXP_REPLACE
+
+语法：REGEXP_REPLACE(str1,pattem[,str2[,pos[,occ[,par]]]])
+
+功能：10g新增函数，扩展了REPLACE函数的功能，并且用于按照特定正则表达式的规则替换字符串。其中参数str1指定源字符表达式，pattem指定正则表达式，str2指定替换字符串，pos指定起始搜索位置，occ指定替换出现的第几个字符串，par指定默认匹配操作的文本串。
+
+ 
+
+select REGEXP_REPLACE(a,’(.)’,’\1’) a from count;
+
+A r g e n t i n a
+
+ 
+
+体会NVL为DECODE，只支持NVL()内不再有其它括号()
+
+select a,
+
+       instr(upper(a), 'NVL(', 1) a3,
+
+       instr(upper(a), ')',instr(upper(a), 'NVL(', 1),1) a4,
+
+       substr(a,instr(upper(a), 'NVL(', 1),instr(upper(a), ')',instr(upper(a), 'NVL(', 1),1)-instr(upper(a), 'NVL(', 1)+1) a41,
+
+       substr(a,instr(upper(a), 'NVL(', 1)+4,instr(upper(a), ')',instr(upper(a), 'NVL(', 1), 1)-instr(upper(a), 'NVL(', 1)-4) a5,
+
+       REGEXP_REPLACE(
+
+       substr(a,instr(upper(a), 'NVL(', 1)+4,instr(upper(a), ')',instr(upper(a), 'NVL(', 1), 1)-instr(upper(a), 'NVL(', 1)-4),
+
+       '(.*),(.*)','\2,\1'
+
+       ) a6,
+
+       REGEXP_REPLACE(
+
+       substr(a,instr(upper(a), 'NVL(', 1)+4,instr(upper(a), ')',instr(upper(a), 'NVL(', 1), 1)-instr(upper(a), 'NVL(', 1)-4),
+
+       '(.*),(.*)','decode(\1,null,\2,'''',\2,\1)'
+
+       ) a7,
+
+       substr(a,1,instr(upper(a), 'NVL(', 1)-1)||REGEXP_REPLACE(
+
+       substr(a,instr(upper(a), 'NVL(', 1)+4,instr(upper(a), ')',instr(upper(a), 'NVL(', 1), 1)-instr(upper(a), 'NVL(', 1)-4),
+
+       '(.*),(.*)','decode(\1,null,\2,'''',\2,\1)'
+
+       )||substr(a,instr(upper(a), ')',instr(upper(a), 'NVL(', 1), 1)+1) a8
+
+  from temp_liut a;
+
+--------------------------------------------------
+
+ 
+
+判断是否是数字
+
+regexp_replace(a, '\d+', '') is null
+
+ 
+
+REGEXP_SUBSTR
+
+语法：REGEXP_SUBSTR(str1,pattem [,pos[,occ[,par]]])
+
+功能：10g新增函数，扩展了SUBSTR函数的功能，并且用于按照特定表达式的规则返回字符串的子串。其中参数str1指定源字符表达式，pattem指定规则表达式， pos指定起始搜索位置，occ指定替换出现的第几个字符串，par指定默认匹配操作的文本串。
+
+ 
+
+Select REGEXP_SUBSTR(‘http://www.oracle.com/products’,’http://([[:alnum:]]+\.?)’) a from dual;
+
+ 
+
+a
+
+http://www.oracle.com/
+
+--------------------------------------------------
+
+ 
+
+REPLACE
+
+语法：REPLACE（string，search_str[,replace_str]）
+
+功能：把string中的所有的子字符串search_str用可选的replace_str替换，如果没有指定replace_str，所有的string中的子字符串search_str都将被删除。REPLACE是TRANSLATE所提供的功能的一个子集。
+
+ 
+
+REPLACE('string','s1','s2')
+
+string   希望被替换的字符或变量
+
+s1       被替换的字符串
+
+s2       要替换的字符串
+
+SQL> select replace('he lohe you','he','i') from dual;
+
+ 
+
+replace('he lohe you','he','i')
+
+i loi you
+
+--------------------------------------------------
+
+ 
+
+TRIM/LTRIM/RTRIM
+
+语法1：LTRIM/RTRIM（string1,[string2]）
+
+语法2：trim([string2] from string1)
+
+语法1功能：中删除从左/右边算起出现在string1中的字符string2，string2如果是多个字符则逐个单字符比对删除,tring2被缺省设置为单个的空格。当遇到不在string2中的第一个字符，结果就被返回了；
+
+语法2功能：删除左右两边出现在string1中的字符string2，tring2必须为单字符，否则报错。
+
+ 
+
+select ltrim(rtrim('   gao qian jing   ',' '),' ') from dual;
+
+gao qian jing
+
+ 
+
+select ltrim('abaaaabbbcda','ab') from dual;
+
+cda
+
+ 
+
+select trim('a' from 'abacda') from dual;
+
+bacd
+
+--------------------------------------------------
+
+ 
+
+SOUNDEX
+
+语法:  SOUNDEX（string）
+
+功能:  返回string的声音表示形式.这对于比较两个拼写不同但是发音类似的单词而言很有帮助，如果字符发音相同，则返回的结果会一致.
+
+ 
+
+SOUNDEX 返回一个与给定的字符串读音相同的字符串
+
+SQL> create table table1(xm varchar(8));
+
+SQL> insert into table1 values('weather');
+
+SQL> insert into table1 values('wether');
+
+SQL> insert into table1 values('gao');
+
+ 
+
+SQL> select xm from table1 where soundex(xm)=soundex('weather');
+
+ 
+
+XM
+
+weather
+
+wether
+
+--------------------------------------------------
+
+ 
+
+SUBSTR
+
+语法:  SUBSTR（string,a[,b]）
+
+功能：截取字符串，从第a个开始取b个字符，这个务必要注意，是字符。 vachar2最长4000个字节，GBK编码中一个中文字符占2个字节，韩文字符占4个字节，如果string是date或者number的数据类型，会自动转化为varchar2。
+
+ 
+
+SQL> select substr('13088888888',3,8) 截取字符串 from dual;
+
+截取字符串
+
+08888888
+
+ 
+
+select SUBSTR(t.a,4),a from temp_liut t;
+
+JAN-00  04-jan-00
+
+--------------------------------------------------
+
+ 
+
+TRANSLATE
+
+语法:  TRANSLATE(string,from_str,to_str)
+
+功能:  将字符string按照from_str与to_str的对应规则进行处理，返回将所出现的from_str中的每个字符替换为to_str中的相应字符以后的string. TRANSLATE是REPLACE所提供的功能的一个超集.如果from_str比to_str长,那么在from_str中而不在to_str中而外的字符将从string中被删除,因为它们没有相应的替换字符. to_str不能为空.Oracle把空字符串认为是NULL,并且如果TRANSLATE中的任何参数为NULL,那么结果也是NULL.
+
+ 
+
+Select TRANSLATE('2abc2234','01234abcde','99999XXXXX') tra from dual
+
+9XXX9999
+
+ 
+
+select replace(TRANSLATE('as中国fd1234','1234567890','0000000000'),'0') from dual;
+
+ 
+
+查找字符串',01234,2342,2,'中逗号出现次数
+
+select length(translate(',01234,2342,2,', 'a0123456789', ' ')) from dual;
+
+ 
+
+判断字符串是否是数字
+
+replace(translate(a, '0123456789', '0'),'0') is null
+
+regexp_replace(a, '\d+', '') is null
+
+ 
+
+UPPER
+
+语法: UPPER（string）
+
+功能: 所有字母大写.（不是字母的字符不变.如果string是CHAR数据类型的,那么结果也是CHAR类型的.如果string是VARCHAR2类型的,那么结果也是VARCHAR2类型的）.
+
+ SQL> select upper('AaBbCcDd') upper from dual;
+
+ 
+
+UPPER
+
+AABBCCDD
+
+--------------------------------------------------
+
+ 
+
+ 
+
+F.2    字符函数——返回数字
+
+ 
+
+(ascii,instr,instrb,length,lengthb,nls_sort)
+
+ 
+
+说明：可以sql和plsql中使用
+
+ 
+
+ 
+
+ASCII
+
+语法:  ASCII（string）
+
+功能: 返回string字符串首字符的十进制表示ascii码值。 CHR和ASCII是互为相反的函数.CHR得到给定字符编码的响应字符. ASCII得到给定字符的字符编码.
+
+ 
+
+SQL> select ascii('A') A,ascii('a') a,ascii('0') zero,ascii(' ') space from dual;
+
+ 
+
+A         A      ZERO     SPACE
+
+65        97        48        32
+
+--------------------------------------------------
+
+ 
+
+INSTR
+
+语法:  INSTR（str1, str2[,a,b]）
+
+功能:  得到在str1中包含str2的位置. a>0,str1时从左边开始检查的,开始的位置为a;a<0,那么str1是从右边开始进行扫描的,开始的位置为a。第b次出现的位置将被返回. a和b都缺省设置为1,这将会返回在string1中第一次出现string2的位置.如果string2在a和b的规定下没有找到,那么返回0.位置的计算是相对于string1的开始位置的,不管a和b的取值是多少.
+
+ 
+
+INSTR(C1,C2,I,J) 在一个字符串中搜索指定的字符,返回发现指定的字符的位置;
+
+C1    被搜索的字符串
+
+C2    希望搜索的字符串
+
+I     搜索的开始位置,默认为1(如果为负数会从后向前搜索)
+
+J     出现的位置,默认为1
+
+SQL> select instr('oracle traning','ra',1,2) instring from dual;
+
+ 
+
+INSTRING
+
+9
+
+--------------------------------------------------
+
+ 
+
+INSTRB
+
+语法:  INSTRB（string1, string2[a,[b]]）
+
+功能:  和INSTR相同,只是操作的对参数字符使用的位置的是字节.
+
+--------------------------------------------------
+
+ 
+
+LENGTH
+
+语法:  LENGTH（string）
+
+功能:  返回字符串的长度，特别注意的，对于空的字段，返回为空，而不是0。
+
+ 
+
+SELECT   LENGTH (' 130 ') 返回字符串长度  FROM DUAL;
+
+ 
+
+返回字符串长度
+
+5
+
+--------------------------------------------------
+
+ 
+
+LENGTHB
+
+语法:  LENGTHB（string）
+
+功能:  返回以字节为单位的string的长度.对于单字节字符集LENGTHB和LENGTH是一样的.
+
+--------------------------------------------------
+
+ 
+
+NLS_SORT
+
+语法: NLS_SORT（string[,nlsparams]）
+
+功能: 得到用于排序string的字符串字节.所有的数值都被转换为字节字符串,这样在不同数据库之间就保持了一致性. Nlsparams的作用和NLS_INITCAP中的相同.如果忽略参数,会话使用缺省排序.
+
+--------------------------------------------------
+
+ 
+
+ 
+
+F.3    数学函数
+
+ 
+
+(abs,acos,asin,atan,atan2,ceil,cos,cosh,exp,floor,ln,log,mod,power,round,sign,sin,sinh,sqrt,tan,tanh,trunc)
+
+ 
+
+说明：数学函数的输入和输出都是数字型，并且多数函数精确到38位。函数cos\cosh\exp\ln\log\sin\sinh\sqrt\tan\tanh精确到36位，acos\asin\atan\atan2精确到30为。数学函数可以在sql语句和plsql块中引用。
+
+ 
+
+ 
+
+ABS
+
+语法:   ABS(x)
+
+功能:   得到x的绝对值.
+
+ 
+
+SQL> select abs(100),abs(-100) from dual;
+
+ 
+
+ABS(100) ABS(-100)
+
+100       100
+
+--------------------------------------------------
+
+ 
+
+ACOS
+
+语法:  ACOS(x)
+
+功能:  返回x的反余弦值. 输入x应该从-1到1之间的数,结果在0到pi之间,输出以弧度为单位.
+
+ 
+
+SQL> select acos(-1) from dual;
+
+ 
+
+ACOS(-1)
+
+3.1415927
+
+--------------------------------------------------
+
+ 
+
+ASIN
+
+语法:  ASIN(x)
+
+功能:  返回x的反正弦值. X的范围应该是－1到1之间,返回的结果在－pi/2到pi/2之间,以弧度为单位.
+
+ 
+
+SQL> select asin(0.5) from dual;
+
+ 
+
+ASIN(0.5)
+
+.52359878
+
+--------------------------------------------------
+
+ 
+
+ATAN
+
+语法:  ATAN(x)
+
+功能:  计算x的反正切值.返回值在－pi/2到pi/2之间,单位是弧度.
+
+ 
+
+SQL> select atan(1) from dual;
+
+ 
+
+ATAN(1)
+
+.78539816
+
+--------------------------------------------------
+
+ 
+
+ATAN2
+
+语法:  ATAN2(x,y)
+
+功能: 返回x除以y的反正切值.结果在负的pi/2到正的pi/2之间,单位是弧度.
+
+--------------------------------------------------
+
+ 
+
+CEIL
+
+语法:  CEIL(x)
+
+功能:  计算大于或等于x的最小整数值.
+
+ 
+
+SQL> select ceil(3.1415927) from dual;
+
+ 
+
+CEIL(3.1415927)
+
+      4
+
+--------------------------------------------------
+
+ 
+
+COS
+
+语法:  COS(x)
+
+功能:  返回x的余弦值. x的单位是弧度.
+
+ 
+
+SQL> select cos(-3.1415927) from dual;
+
+ 
+
+COS(-3.1415927)
+
+     -1
+
+--------------------------------------------------
+
+ 
+
+COSH
+
+语法:  COSH(x)
+
+功能:  计算x的双曲余弦值.
+
+ 
+
+SQL> select cosh(20) from dual;
+
+ 
+
+COSH(20)
+
+242582598
+
+--------------------------------------------------
+
+ 
+
+EXP
+
+语法:  EXP(x)
+
+功能:  计算e的x次幂. e为自然对数,约等于2.71828.
+
+ 
+
+SQL> select exp(2),exp(1) from dual;
+
+ 
+
+EXP(2)    EXP(1)
+
+7.3890561 2.7182818
+
+--------------------------------------------------
+
+ 
+
+FLOOR
+
+语法:  FLOOR(x)
+
+功能:  返回小于等于x的最大整数值.
+
+ 
+
+SQL> SELECT   FLOOR (2345.67), FLOOR (-2345.67) FROM dual;
+
+ 
+
+FLOOR(2345.67)   FLOOR (-2345.67)
+
+  2345                        -2346
+
+--------------------------------------------------
+
+ 
+
+LN
+
+语法:  LN(x)
+
+功能:  返回x的自然对数. x必须是正数,并且大于0
+
+ 
+
+SQL> select ln(1),ln(2),ln(2.7182818) from dual;
+
+ 
+
+LN(1)     LN(2) LN(2.7182818)
+
+0 .69314718     .99999999
+
+--------------------------------------------------
+
+ 
+
+LOG
+
+语法:  LOG(x,y)
+
+功能:  计算以x为底的y的对数.底必须大于0而且不等于1, y为任意正数.
+
+ 
+
+SQL> select log(2,1),log(2,4) from dual;
+
+ 
+
+LOG(2,1)  LOG(2,4)
+
+0         2
+
+--------------------------------------------------
+
+ 
+
+MOD
+
+语法:  MOD(x,y)
+
+功能:  返回x除以y的余数.如果y是0,则返回x
+
+ 
+
+SQL> select mod(10,3),mod(3,3),mod(2,3) from dual;
+
+ 
+
+MOD(10,3)  MOD(3,3)  MOD(2,3)
+
+1         0         2
+
+--------------------------------------------------
+
+ 
+
+POWER
+
+语法:  POWER(x,y)
+
+功能:  计算x的y次幂.
+
+ 
+
+POWER 返回n1的n2次方根
+
+SQL> select power(2,10),power(3,3) from dual;
+
+ 
+
+POWER(2,10) POWER(3,3)
+
+1024         27
+
+--------------------------------------------------
+
+ 
+
+ROUND
+
+语法:  ROUND(x[,y])
+
+功能:  四舍五入函数，y缺省值为0，x保留整数；y>0，x保留小数点右边y位；y<0，x保留小数点左边 |y| 位;可以对时间进行round，效果是只保留年月日。
+
+ 
+
+SELECT   ROUND (55.655, 2),   --55.66
+
+         ROUND (55.654, 2),   --55.65
+
+         ROUND (45.654, -1),  --50
+
+         ROUND (45.654, -2),  --0
+
+         ROUND (55.654, -2)   --100
+
+  FROM   DUAL;
+
+--------------------------------------------------
+
+ 
+
+SIGN
+
+语法:  SIGN(x)
+
+功能:  检测x的正负.如果x<0返回－1.如果x=0返回0.如果x>0返回1.
+
+ 
+
+SQL> select sign(123),sign(-100),sign(0) from dual;
+
+ 
+
+SIGN(123) SIGN(-100)   SIGN(0)
+
+1         -1         0
+
+ 
+
+常和decode 结合使用
+
+--------------------------------------------------
+
+ 
+
+SIN
+
+语法:SIN(x)
+
+功能:计算x的正弦值. X是一个以弧度表示的角度.
+
+ 
+
+SQL> select sin(1.57079) from dual;
+
+ 
+
+SIN(1.57079)
+
+   1
+
+--------------------------------------------------
+
+ 
+
+SINH
+
+语法:SINH(x)
+
+功能:返回x的双曲正弦值.
+
+ 
+
+SQL> select sin(20),sinh(20) from dual;
+
+ 
+
+SIN(20)  SINH(20)
+
+.91294525 242582598
+
+--------------------------------------------------
+
+ 
+
+SQRT
+
+语法:  SQRT(x)
+
+功能:  返回x的平方根. x必须是正数.
+
+ 
+
+SQL> select sqrt(64),sqrt(10) from dual;
+
+ 
+
+SQRT(64)  SQRT(10)
+
+8 3.1622777
+
+--------------------------------------------------
+
+ 
+
+TAN
+
+语法:  TAN(x)
+
+功能:  计算x的正切值, x是一个以弧度位单位的角度.
+
+ 
+
+SQL> select tan(20),tan(10) from dual;
+
+ 
+
+TAN(20)   TAN(10)
+
+2.2371609 .64836083
+
+--------------------------------------------------
+
+ 
+
+TANH
+
+语法:  TANH(x)
+
+功能:  计算x的双曲正切值.
+
+ 
+
+SQL> select tanh(20),tan(20) from dual;
+
+ 
+
+TANH(20)   TAN(20)
+
+1 2.2371609
+
+--------------------------------------------------
+
+ 
+
+TRUNC
+
+语法:  TRUNC(x[,y])
+
+功能:  截取数字函数，只舍不入函数， y缺省值为0，x保留整数；y>0，x保留小数点右边y位；y<0，x保留小数点左边 |y| 位
+
+ 
+
+SELECT   TRUNC (55.655, 2),   --55.65
+
+         TRUNC (55.654, 2),   --55.65
+
+         TRUNC (45.654, -1),  --40
+
+         TRUNC (45.654, -2),  --0
+
+         TRUNC (55.654, -2)   --0
+
+  FROM   DUAL;
+
+ 
+
+SELECT   TRUNC (SYSDATE, 'DD'),  --当天
+
+         TRUNC (SYSDATE, 'MM'),  --本月第一天
+
+         TRUNC (SYSDATE, 'yyyy'),  --本年第一天
+
+         TRUNC (SYSDATE, 'day'),  --本周第一天
+
+         TRUNC (SYSDATE, 'q')  --本季度第一天
+
+  FROM   DUAL;
+
+--------------------------------------------------
+
+ 
+
+ 
+
+F.4  日期时间函数
+
+(add_months,current_date,current_timestamp,dbtimesone,extract,from_tz,last_day,months_between,new_time,next_day,numtodsinternal,numtoyminternal,round,sys_extract_utc,sysdate,systimestamp,to_dsinternal,to_timestamp,to_timestamp_tz,to_yminternal,trunc,tz_offset)
+
+ 
+
+说明：日期时间函数用于处理date和timestamp类型的数据，除了函数months_between返回数字外，其余均返回date类型，Oracle以7位数字格式来存放日期数据，包括世纪、年、月、日、小时、分钟、秒，并且默认日期显式格式为“DD-MON-YY”。
+
+ 
+
+ 
+
+ADD_MONTHS
+
+语法:ADD_MONTHS(d,x)
+
+功能:返回日期d加上x个月后的月份。x可以是任意整数。如果结果日期中的月份所包含的天数比d日期中的“日”分量要少。（即相加后的结果日期中的日分量信息已经超过该月的最后一天，例如，8月31日加上一个月之后得到9月31日，而9月只能有30天）返回结果月份的最后一天。
+
+使用位置:过程性语言和SQL语句。
+
+ 
+
+SQL> select to_char(add_months(to_date('199912','yyyymm'),2),'yyyymm') from dual;
+
+TO_CHA
+
+200002
+
+ 
+
+SQL> select to_char(add_months(to_date('199912','yyyymm'),-2),'yyyymm') from dual;
+
+TO_CHA
+
+199910
+
+--------------------------------------------------
+
+ 
+
+CURRENT_DATE
+
+语法: CURRENT_DATE
+
+功能:9i新增函数，返回当前会话时区所对应的日期时间。
+
+ 
+
+select CURRENT_DATE from dual;
+
+--------------------------------------------------
+
+ 
+
+CURRENT_TIMESTAMP
+
+语法:CURRENT_TIMESTAMP
+
+功能:9i新增函数，返回当前会话时区所对应的日期时间。
+
+ 
+
+select CURRENT_TIMESTAMP from dual;
+
+--------------------------------------------------
+
+ 
+
+DBTIMESONE
+
+语法:DBTIMESONE
+
+功能:9i新增函数，返回数据库所在时区。
+
+ 
+
+select DBTIMESONE from dual;
+
+--------------------------------------------------
+
+ 
+
+EXTRACT
+
+语法: EXTRACT(s)
+
+功能:9i新增函数，从日期时间值中取得所需要的特定数据
+
+ 
+
+Select extract(year from sysdate) year from dual;
+
+ 
+
+Yaer
+
+2013
+
+--------------------------------------------------
+
+ 
+
+FROM_TZ
+
+语法: FROM_TZ(s)
+
+功能:9i新增函数，将特定时区的TIMESTAMP值转换为TIMESTAMP WITH TIME ZONE值。
+
+ 
+
+Select from_tz(timestamp ‘2013-03-28 08:00:00’,’3:00’);
+
+--------------------------------------------------
+
+ 
+
+LAST_DAY
+
+语法:LAST_DAY(d)
+
+功能:计算包含日期的d的月份最后一天的日期.这个函数可以用来计算当月中剩余天数.
+
+使用位置:过程性语言和SQL语句。
+
+LAST_DAY
+
+返回日期的最后一天
+
+SQL> select to_char(sysdate,'yyyy.mm.dd') aa from dual;
+
+ 
+
+aa
+
+2004.05.09
+
+ 
+
+SQL> select last_day(sysdate) from dual;
+
+ 
+
+LAST_DAY(S
+
+31-5月 -04
+
+--------------------------------------------------
+
+ 
+
+LOCALTIMESTAMP
+
+语法：LOCALTIMESTAMP
+
+功能：9i新增函数，返回当前会话时区的日期时间。
+
+ 
+
+Select LOCALTIMESTAMP from dual;
+
+--------------------------------------------------
+
+ 
+
+MONTHS_BETWEEN
+
+语法:MONTHS_BETWEEN(date1,date2)
+
+功能:计算date1和date2之间相差的月数.如果date1<date2，则返回负数；如果date1,date2这两个日期中日分量信息是相同的,或者这两个日期都分别是所在月的最后一天,那么返回的结果是一个整数,否则包括一个小数,小数为富余天数除以31，Oracle以每月31天为准计算结果。
+
+SQL> select months_between('19-12月-1999','19-3月-1999') mon_between from dual;
+
+MON_BETWEEN
+
+  9
+
+ 
+
+SQL>selectmonths_between(to_date('2000.05.20','yyyy.mm.dd'),to_date('2005.05.20','yyyy.dd')) mon_betw from dual;
+
+MON_BETW
+
+-60
+
+--------------------------------------------------
+
+ 
+
+NEW_TIME
+
+语法:NEW_TIME(d,zone1,zone2)
+
+功能:计算当时区zone1中的日期和时间是d时候,返回时区zone2中的日期和时间. zone1和zone2是字符串. 给出在this时区=other时区的日期和时间。
+
+使用位置:过程性语言和SQL语句。
+
+ 
+
+NEW_TIME   (d,   ‘tz1’,   ‘tz2’)
+
+ 
+
+d:：一个有效的日期型变量
+
+tz1   &   tz2:：下表中的任一时区
+
+ 
+
+时区1   时区2       说明
+
+AST       ADT           大西洋标准时间
+
+BST       BDT           白令海标准时间
+
+CST       CDT           中部标准时间
+
+EST       EDT           东部标准时间
+
+GMT                     格林尼治标准时间
+
+HST       HDT           阿拉斯加—夏威夷标准时间
+
+MST       MDT           山区标准时间
+
+NST                     纽芬兰标准时间
+
+PST       PDT           太平洋标准时间
+
+YST       YDT           YUKON标准时间
+
+ 
+
+SQL> select to_char(sysdate,'yyyy.mm.dd hh24:mi:ss') bj_time,to_char(new_time
+
+2  (sysdate,'PDT','GMT'),'yyyy.mm.dd hh24:mi:ss') los_angles from dual;
+
+ 
+
+BJ_TIME             LOS_ANGLES
+
+2004.05.09 11:05:32 2004.05.09 18:05:32
+
+--------------------------------------------------
+
+ 
+
+NEXT_DAY
+
+语法:NEXT_DAY(d,string)
+
+功能: 给出日期d和星期string之后计算下一个星期的日期. String是星期几;当前会话的语言指定了一周中的某一天.返回值的时间分量与d的时间分量是相同的. String的内容可以忽略大小写.
+
+使用位置:过程性语言和SQL语句。
+
+NEXT_DAY(date,'day')
+
+ 
+
+SQL> select next_day('18-5月-2001','星期五') next_day from dual;
+
+ 
+
+NEXT_DAY
+
+25-5月 -01
+
+--------------------------------------------------
+
+ 
+
+NUMTODSINTERNAL
+
+语法：NUMTODSINTERNAL(n,char_expr)
+
+功能：将数字n转换为INTERNAL DAY TO SECOND格式， char_expr可以是DAY\HOUR\MINUTE或SECOND。
+
+ 
+
+Select NUMTODSINTERNAL(1000,’minute’) from dual;
+
+--------------------------------------------------
+
+ 
+
+NUMTOYMINTERNAL
+
+语法：NUMTOYMINTERNAL(n,char_expr)
+
+功能：将数字n转换为INTERVAL YEAR TO MONTH格式，char_expr可以是year或者month。
+
+ 
+
+Select NUMTOYMINTERNAL(100,’MONTH’) from dual;
+
+--------------------------------------------------
+
+ 
+
+ROUND
+
+语法:ROUND(d[,format])
+
+功能:将日期d按照由format指定的格式进行四舍五入处理处理.如果没有给format则使用缺省设置`DD`.
+
+使用位置:过程性语言和SQL语句。
+
+ 
+
+Select round(sysdate,’MONTH’) from dual;
+
+--------------------------------------------------
+
+ 
+
+SYS_EXTRACT_UTC
+
+语法：SYS_EXTRACT_UTC(date)
+
+功能：返回特定时区时间所对应的格林威治时间。
+
+ 
+
+Select SYS_EXTRACT_UTC(systimestamp) from dual;
+
+--------------------------------------------------
+
+ 
+
+SYSDATE
+
+语法: SYSDATE
+
+功能:取得当前的日期和时间,类型是DATE.它没有参数.但在分布式SQL语句中使用时,SYSDATE返回本地数据库的日期和时间.
+
+使用位置:过程性语言和SQL语句。
+
+SQL> select to_char(sysdate,'yyyy-mm-dd hh24:mi:ss') from dual;
+
+--------------------------------------------------
+
+ 
+
+SYSTIMESTAMP
+
+语法：SYSTIMESTAMP
+
+功能：9i新增函数，返回当前系统的日期时间及时区。
+
+ 
+
+Select systimestamp from dual;
+
+--------------------------------------------------
+
+ 
+
+TO_DSINTERNAL
+
+语法：TO_DSINTERNAL(char[,’nls_param’])
+
+功能：9i新增函数，将符合特定日期和时间格式的字符串转变为INTERVAL DAY TO SECOND类型。
+
+ 
+
+Select TO_DSINTERNAL(’58:10:10’) from dual;
+
+--------------------------------------------------
+
+ 
+
+TO_TIMESTAMP
+
+语法：TO_TIMESTAMP(char[fmt[,’nls_param’]])
+
+功能：9i新增函数，将符合特定日期和时间格式的字符串转变为TIMESTAMP类型。
+
+select systimestamp from dual
+
+ 
+
+1. 字符型转成timestamp
+
+Select TO_TIMESTAMP(’01-1月-03’) from dual;
+
+select to_timestamp('01-10月-08 07.46.41.000000000 上午','dd-MON-yy hh:mi:ss.ff AM') 
+
+from dual;
+
+ 
+
+2. timestamp转成date型
+
+select cast(TO_TIMESTAMP('2015-10-01 21:11:11.328', 'yyyy-mm-dd hh24:mi:ss.ff') as date)
+
+from dual;
+
+ 
+
+3. date型转成timestamp
+
+select cast(sysdate as timestamp) date_to_timestamp
+
+from dual;
+
+ 
+
+--------------------------------------------------
+
+ 
+
+TO_TIMESTAMP_TZ
+
+语法：TO_TIMESTAMP_TZ(char[fmt[,’nls_param’]])
+
+功能：9i新增函数，将符合特定日期和时间格式的字符串转变为TIMESTAMP WITH TIME ZONE类型。
+
+ 
+
+Select TO_TIMESTAMP_TZ(’20130101’,’yyyymmdd’) from dual;
+
+--------------------------------------------------
+
+ 
+
+TO_YMINTERNAL
+
+语法：TO_YMINTERNAL(char)
+
+功能：9i新增函数，将符合特定日期和时间格式的字符串转变为INTERVAL YEAR TO MONTH类型。
+
+ 
+
+select TO_TIMESTAMP('2015-10-01 21:11:11.328', 'yyyy-mm-dd hh24:mi:ss.ff') -
+
+       TO_TIMESTAMP('2015-10-01 11:11:11.328', 'yyyy-mm-dd hh24:mi:ss.ff')
+
+  from dual;
+
+ 
+
+--------------------------------------------------
+
+ 
+
+TRUNC
+
+语法:TRUNC(d,format)
+
+功能:截断日期时间数据，计算截尾到由format指定单位的日期d.缺省参数同ROUNG.
+
+使用位置:过程性语言和SQL语句。如果fmt='mi'表示保留分,截断秒，如此类推。
+
+ 
+
+SQL> select to_char(trunc(sysdate,'hh'),'yyyy.mm.dd hh24:mi:ss') hh,
+
+  2  to_char(trunc(sysdate,'mi'),'yyyy.mm.dd hh24:mi:ss') hhmm from dual;
+
+ 
+
+HH                  HHMM
+
+2004.05.09 11:00:00 2004.05.09 11:17:00
+
+--------------------------------------------------
+
+ 
+
+TZ_OFFSET
+
+语法：TO_OFFSET(time_zone_name||sessiontimezone||dbtimezone)
+
+功能：9i新增函数，返回特定时区与UTC相比的时区偏移。
+
+ 
+
+Select TO_OFFSET (’EST’) from dual;
+
+--------------------------------------------------
+
+ 
+
+ 
+
+F.5   转换函数
+
+(asciistr,bin_to_num,cast,chartorowid,compose,convert,decompose,hextoraw, INTERVAL,rawtonhex,rowidtochar,rowidtonchar,scn_to_timestamp,timestamp_to_scn,to_char,to_clob,to_date,to_lob,to_label,to_multi_byte,to_nchar,to_number,to_single_byte,translate...using,unistr)
+
+ 
+
+说明：用于将数值从一种数据类型转换为另一种数据类型。
+
+ 
+
+ 
+
+ASCIISTR
+
+语法：ASCIISTR(s)
+
+功能：9i新增函数，将任意字符集的字符串转变为数据库字符集的ASCII字符串。
+
+ 
+
+Select ASCIISTR (’中国’) 中 from dual;
+
+ 
+
+中
+
+\4E2D\56FD
+
+--------------------------------------------------
+
+ 
+
+BIN_TO_NUM
+
+语法：BIN_TO_NUM(expr[,expr]…)
+
+功能：9i新增函数，用于将位向量值转变为实际的数字值。
+
+ 
+
+Select BIN_TO_NUM(1,0,1,1,1) 中 from dual;
+
+ 
+
+中
+
+23
+
+--------------------------------------------------
+
+ 
+
+CAST
+
+语法：CAST(expr AS type_name)
+
+功能：用于将一个内置数据类型或集合类型转变为另一个内置数据类型或集合类型。可以作用于长度为0的空字段视图建表格之用。
+
+ 
+
+Select cast(SYSDATE AS VARCHAR2) 中 from dual;
+
+Create table tb_dual nologging as Select cast(null as varchar2(1)) from dual;
+
+--------------------------------------------------
+
+ 
+
+CHARTOROWID
+
+语法:CHARTOROWID(string)
+
+功能: 将字符数据类型转换为ROWID类型,把包含外部格式的ROWID的CHAR或VARCHAR2数值转换为内部的二进制格式.参数string必须是包含外部格式的ROWID的18字符的字符串.oracle7和oracle8中的外部格式是不同的.CHARTOROWID是ROWIDTOCHAR的反函数.
+
+使用位置:过程性语言和SQL语句。
+
+ 
+
+SQL> select rowid,rowidtochar(rowid),ename from scott.emp;
+
+ 
+
+ROWID              ROWIDTOCHAR(ROWID) ENAME
+
+AAAAfKAACAAAAEqAAA AAAAfKAACAAAAEqAAA SMITH
+
+AAAAfKAACAAAAEqAAB AAAAfKAACAAAAEqAAB ALLEN
+
+AAAAfKAACAAAAEqAAC AAAAfKAACAAAAEqAAC WARD
+
+AAAAfKAACAAAAEqAAD AAAAfKAACAAAAEqAAD JONES
+
+--------------------------------------------------
+
+ 
+
+COMPOSE
+
+语法：COMPOSE(string)
+
+功能：9i新增函数，用于将输入字符串转变为UNICODE字符串值。
+
+ 
+
+Select COMPOSE(‘o’||unistr(‘\0308’)) 中 from dual;
+
+ 
+
+中
+
+?
+
+--------------------------------------------------
+
+ 
+
+CONVERT
+
+语法:CONVERT(string,dest_set[,source_set])
+
+功能:将字符串string从source_set所表示的字符集转换为由dest_set所表示的字符集.如果source_set没有被指定,它缺省的被设置为数据库的字符集.
+
+使用位置:过程性语言和SQL语句。
+
+ 
+
+SQL> select convert('中国','US7ASCII','WE8ISO8859P1') "conversion" from dual;
+
+--------------------------------------------------
+
+ 
+
+DECOMPOSE
+
+语法：DECOMPOSE(string)
+
+功能：9i新增函数，用于分解字符串并返回相应的UNICODE字符串。
+
+ 
+
+Select COMPOSE(‘chateoux’) 中 from dual;
+
+--------------------------------------------------
+
+ 
+
+HEXTORAW
+
+语法:HEXTORAW(string)
+
+功能: 将string一个十六进制构成的字符串转换为二进制RAW数值. String中的每两个字符表示了结果RAW中的一个字节..HEXTORAW和RAWTOHEX为相反的两个函数.
+
+使用位置:过程性语言和SQL语句。
+
+ 
+
+Select HEXTORAW (‘AB56’) 中 from dual;
+
+--------------------------------------------------
+
+ 
+
+INTERVAL
+
+语法：INTERVAL 'integer [- integer]' {YEAR | MONTH} [(precision)][TO {YEAR | MONTH}]
+
+功能：该数据类型常用来表示一段时间差, 注意时间差只精确到年和月. precision为年或月的精确域, 有效范围是0到9, 默认值为2。
+
+ 
+
+INTERVAL '123-2' YEAR(3) TO MONTH
+
+表示: 123年2个月, "YEAR(3)" 表示年的精度为3, 可见"123"刚好为3为有效数值, 如果该处YEAR(n), n<3就会出错, 注意默认是2.
+
+ 
+
+INTERVAL '11:12:10.1234567' HOUR TO SECOND
+
+表示：小时，秒
+
+结果：+00 11:12:10.123457
+
+ 
+
+INTERVAL '123' YEAR(3)
+
+表示: 123年0个月
+
+ 
+
+INTERVAL '300' MONTH(3)
+
+表示: 300个月, 注意该处MONTH的精度是3啊.
+
+ 
+
+INTERVAL '4' YEAR
+
+表示: 4年, 同 INTERVAL '4-0' YEAR TO MONTH 是一样的
+
+ 
+
+INTERVAL '50' MONTH
+
+表示: 50个月, 同 INTERVAL '4-2' YEAR TO MONTH 是一样
+
+ 
+
+INTERVAL '123' YEAR
+
+表示: 该处表示有错误, 123精度是3了, 但系统默认是2, 所以该处应该写成 INTERVAL '123' YEAR(3) 或"3"改成大于3小于等于9的数值都可以的
+
+ 
+
+INTERVAL '5-3' YEAR TO MONTH + INTERVAL '20' MONTH =
+
+INTERVAL '6-11' YEAR TO MONTH
+
+表示: 5年3个月 + 20个月 = 6年11个月
+
+ 
+
+RAWTONHEX
+
+语法:RAWTONHEX(rawvalue)
+
+功能:9i新增函数，将RAW类数值rawvalue转换为一个相应的十六进制表示的字符串. rawvalue中的每个字节都被转换为一个双字节的字符串. RAWTOHEX和HEXTORAW是两个相反的函数.
+
+使用位置:过程性语言和SQL语句。
+
+ 
+
+Select rawtonhex(‘7D’) from dual;
+
+--------------------------------------------------
+
+ 
+
+ROWIDTOCHAR
+
+语法:ROWIDTOCHAR(rowid)
+
+功能:9i新增函数，将ROWID类型的数值rowid转换为varchar2的字符串表示,在oracle7和oracle8之间有些不一样的地方. ROWIDTOCHAR和CHARTOROWID是两个相反的函数.
+
+使用位置:过程性语言和SQL语句。
+
+ 
+
+--------------------------------------------------
+
+ 
+
+ROWIDTONCHAR
+
+语法:ROWIDTOCHAR(rowid)
+
+功能:9i新增函数，将ROWID类型的数值rowid转换为Nvarchar2的字符串表示,在oracle7和oracle8之间有些不一样的地方. ROWIDTOCHAR和CHARTOROWID是两个相反的函数.
+
+使用位置:过程性语言和SQL语句。
+
+ 
+
+--------------------------------------------------
+
+ 
+
+SCN_TO_TIMESTAMP
+
+语法:SCN_TO_TIMESTAMP(number)
+
+功能:10g新增函数，根据输入的scn值返回对应的大概日期时间，其中number用于指定scn值.
+
+使用位置:过程性语言和SQL语句。
+
+ 
+
+Select SCN_TO_TIMESTAMP(ora_rowscn) from emp;
+
+--------------------------------------------------
+
+ 
+
+TIMESTAMP_TO_SCN
+
+语法:TIMESTAMP_TO_SCN(timestamp)
+
+功能:10g新增函数，用于根据输入的timestamp返回所对应的scn值，其中timestamp、用于指定日期时间。
+
+使用位置:过程性语言和SQL语句。
+
+ 
+
+Select TIMESTAMP_TO_SCN(order_date) from emp;
+
+--------------------------------------------------
+
+ 
+
+TO_CHAR
+
+语法1:TO_CHAR(character)
+
+功能1:用于将NCHAR,NVARCHAR2,CLOB,NCLOB数据转变为数据库字符集数据，当用于NCHAR,NVARCHAR2,NCLOB时字符用单引号括起来，前面加上n。
+
+ 
+
+Select to_char（n’中国’） from dual;
+
+ 
+
+语法2:TO_CHAR(d [,format[,nlsparams]])
+
+功能2:将日期d转换为一个VARCHAR2类型的字符串.format指定日期格式,.如果没有给定format,使用的就是该会话的缺省日期格式.nlsparams指定NLS参数. nlsparams的格式是:“NLS_DATE_LANGUAGE”
+
+使用位置:过程性语言和SQL语句。
+
+ 
+
+select to_char(sysdate,'yyyy/mm/dd hh24:mi:ss') from dual;
+
+2004/05/09 21:14:41
+
+ 
+
+语法3:TO_CHAR(labels[,format])
+
+功能3:将MISLABEL的LABEL转换为一个VARCHAR2类型的变量.
+
+使用位置:在trusted数据库的过程性语句和SQL语句。
+
+ 
+
+语法4: TO_CHAR(num[,format[,nlsparams]])
+
+功能4:将NUMBER类型的参数num转换为一个VARCHAR2类型的变量.如果指定了format,那么它会控制这个转换处理.表5-5列除了可以使用的数字格式.如果没有指定format,它会控制这个转换过程.下面列出了可以使用的数字格式.如果没有指定format,那么结果字符串将包含和num中有效位的个数相同的字符. nlsparams用来指定小数点和千分位分隔符和货币符号.可以使用的格式:`NLS_NUMERIC_CHARS=”dg”NLS_CURRENCY=”string”
+
+d和g分别表示列小数点和千分位分隔符. String表示了货币的符号.例如,在美国小数点分隔符通常是一个句点(.),分组分隔符通常是一个逗号(,),而千分位符号通常是一个$.
+
+使用位置:过程性语言和SQL语句。
+
+ 
+
+SELECT TO_CHAR(TO_DATE('11-oct-2007'), 'fmDdthsp "of" Month, Year') FROM DUAL;
+
+以上正确，需要注意的是不属于转换日期格式标识符需要使用双引号，如上面的"of"
+
+ 
+
+SELECT promo_name, TRIM(TO_CHAR(promo_end_date,'Day')) ||', '||
+
+                   TRIM(TO_CHAR(promo_end_date,'Month')) ||' '||
+
+                   TRIM(TO_CHAR(promo_end_date,'DD, YYYY')) AS last_day
+
+       FROM promotions;
+
+等价于下面，fm有trim的作用去掉多余空格
+
+SELECT promo_name,TO_CHAR(promo_end_date,'fmDay')||','||
+
+                  TO_CHAR(promo_end_date,'fmMonth')||' '||
+
+                  TO_CHAR(promo_end_date,'fmDD, YYYY') AS last_day
+
+       FROM promotions;
+
+上述当中，Day\DAY\day等等转换后都是带空格的，而YYYY则不会。
+
+ 
+
+--将number格式转换为货币格式，前面均带空格
+
+select TO_CHAR(12345,'$99999D99') from dual;-- $12345.00
+
+SELECT TO_CHAR(1890.55,'$00G000D00') FROM DUAL;-- $01,890.55
+
+SELECT TO_CHAR(1890.55,'$99G999D99') FROM DUAL;--   $1,890.55
+
+--------------------------------------------------
+
+ 
+
+TO_CLOB
+
+语法:TO_CLOB (char)
+
+功能:9i新增函数，将字符串转变为CLOB类型。Char参数使用NCHAR,NVARCHAR2，NCLOB类型，字符串需要单引号括起来，且在前面加上n.
+
+ 
+
+Select TO_CLOB（n’中国’） from dual;
+
+--------------------------------------------------
+
+ 
+
+TO_DATE
+
+语法:TO_DATE(String[,format[,nlsparams]])
+
+功能:将符合特定日期格式的字符串转变为date类型. format是一个日期格式字符串.当不指定format的时候,使用该会话的缺省日期格式，需要特别注意的，缺省格式并不适用'2015-03-03'这种形式。
+
+ 
+
+Select to_date(‘20130101’,’yyyymmdd’) from dual;--正确
+
+SELECT TO_DATE('01/JANUARY/2007') FROM DUAL;--正确，缺省支持
+
+SELECT TO_DATE('01-JANUARY-2007') FROM DUAL;--正确，缺省支持
+
+SELECT TO_DATE('2015-03-03') FROM DUAL;--错误，缺省不支持
+
+--------------------------------------------------
+
+ 
+
+TO_LOB
+
+语法:TO_LOB (long_column)
+
+功能:9i新增函数，将LONG或LONG ROW列的数据转变为相应的LOB类型。但需要注意的是，在单纯的select语句中会报错，如例子所示。
+
+使用位置:过程性语言和SQL语句。
+
+ 
+
+例子：to_lob转化long
+
+select VIEW_NAME,to_lob(text) text from user_views;  --会报错
+
+create table temp_liutao nologging as select VIEW_NAME,to_lob(text) text from user_views  --通过
+
+ 
+
+--------------------------------------------------
+
+ 
+
+TO_LABEL
+
+语法:TO_LABEL(String[,format])
+
+功能:将String转换为一个MLSLABEL类型的变量. String可以是VARCHAR2或者CHAR类型的参数.如果指定了format,那么它就会被用在转换中.如果没有指定format,那么使用缺省的转换格式.
+
+使用位置:过程性语言和SQL语句。
+
+--------------------------------------------------
+
+ 
+
+TO_MULTI_BYTE
+
+语法:TO_MULTI_BYTE(String)
+
+功能:计算所有单字节字符都替位换位等价的多字节字符的String.该函数只有当数据库字符集同时包含多字节和单字节的字符的时候有效.否则, String不会进行任何处理. TO_MULTI_BYTE和TO_SINGLE_BYTE是相反的两个函数.
+
+使用位置:过程性语言和SQL语句。
+
+ 
+
+SQL>  select to_multi_byte('高') from dual;
+
+ 
+
+TO
+
+高
+
+--------------------------------------------------
+
+ 
+
+TO_NCHAR
+
+语法1:TO_NCHAR(char)
+
+功能1:将字符串由数据库字符集转变为民族字符集。
+
+ 
+
+SQL>  select TO_NCHAR ('高') from dual;
+
+ 
+
+语法2:TO_NCHAR(date,[,fmt[,nls_param]])
+
+功能2:将日期时间值转变为民族字符集。
+
+ 
+
+SQL>  select TO_NCHAR (sysdate) from dual;
+
+ 
+
+语法3:TO_NCHAR(number)
+
+功能3:将数字值转变为民族字符集。
+
+ 
+
+SQL>  select TO_NCHAR (10) from dual;
+
+ 
+
+--------------------------------------------------
+
+ 
+
+TO_NUMBER
+
+语法: TO_NUMBER(String[,format[,nlsparams]])
+
+功能:将CHAR或者VARCHAR2类型的String转换为一个NUMBER类型的数值.如果指定了format,那么String应该遵循相应的数字格式. Nlsparams的行为方式和TO_CHAR中的完全相同.TO_NUMBER和TO_CHAR是两个相反的函数.
+
+使用位置:过程性语言和SQL语句。
+
+ 
+
+SQL> select to_number('1999') year from dual;
+
+ 
+
+     YEAR
+
+     1999
+
+--------------------------------------------------
+
+ 
+
+TO_SINGLE_BYTE
+
+语法: TO_SINGLE_BYTE(String )
+
+功能:计算String中所有多字节字符都替换为等价的单字节字符.该函数只有当数据库字符集同时包含多字节和单字节的字符的时候有效.否则, String不会进行任何处理.
+
+TO_MULTI_BYTE和TO_SINGLE_BYTE是相反的两个函数.
+
+使用位置:过程性语言和SQL语句。
+
+ 
+
+Select TO_SINGLE_BYTE(‘a b c’) from dual;
+
+ 
+
+--------------------------------------------------
+
+ 
+
+TRANSLATE…USING
+
+语法: TRANSLATE(str1 USING zfj)
+
+功能:将字符串转变为数据库字符集(char_cs)或民族字符集(nchar_cs)
+
+ 
+
+Select TRANSLATE(‘中国’ using nchar_cs) from dual;
+
+ 
+
+--------------------------------------------------
+
+ 
+
+UNISTR
+
+语法: UNISTR(str1)
+
+功能:9i新增函数，输入字符串返回相应的UNICODE字符
+
+ 
+
+Select UNISTR (‘\00D6’) from dual;
+
+ 
+
+--------------------------------------------------
+
+ 
+
+ 
+
+F.6  分组统计函数
+
+ 
+
+(avg,corr,count,covar_pop,covar_samp,cume_dist,dense_rank,first,group_id,grouping,grouping_id,glb,last,listagg,lub,max,min,percent_rank,percentile_cont,percentile_disc,rank,stddev,stddev_pop,stddev_samp,sum,var_pop,var_samp,variance)
+
+ 
+
+ 
+
+说明：分组函数也被称为多行函数，它会根据输入的多行数据返回一个结果。主要用于执行数据统计或汇总操作，并且分组函数只能出现在select语句选择列表、order by子句和having子句中。注意分组函数不能直接在plsql中引用，只能在内嵌select语句中使用。
+
+ 
+
+ 
+
+AVG
+
+语法:AVG([DISTINCT|ALL]col)
+
+功能:返回一列数据的平均值,缺省使用是ALL修饰符，all表示对所有的值求平均值,distinct排重后再求平均值
+
+使用位置:查询列表和GROUP BY子句.
+
+ 
+
+SQL> select avg(distinct sal) from gao.table3;
+
+ 
+
+AVG(DISTINCTSAL)
+
+         3333.33
+
+ 
+
+SQL> select avg(all sal) from gao.table3;
+
+ 
+
+AVG(ALLSAL)
+
+    2592.59
+
+--------------------------------------------------
+
+ 
+
+CORR
+
+语法:CORR([expr1,expr2)
+
+功能:返回成对数值的相关系数，其数值使用表达式”covar_pop(expr1,expr2)/(stddev_pop(expr1)*stddev_pop(expr2))”
+
+使用位置:查询列表和GROUP BY子句.
+
+ 
+
+SQL> select corr(list_,min_) from gao.table3;
+
+ 
+
+--------------------------------------------------
+
+ 
+
+COUNT
+
+语法:COUNT(*|[DISTINCT|ALL] col)
+
+功能:得到查询中行的数目.如果使用了*获得行的总数.如果在参数中传递的是选择列表,那么计算的是非空数值。我基于10G测试，有主键情况下，count(主键)最快，count(1)和count(*)调动主键统计，时间上一样；无主键情况下count(索引列)最快，但需要注意count(列名)统计不包括null，count(常量)和count(*)包括null
+
+ 
+
+Select count(distinct sal) from emp;
+
+--------------------------------------------------
+
+ 
+
+COVAR_POP
+
+语法:COVAR_POP(expr1,expr2)
+
+功能:返回成对数字的协方差，其数值使用表达式”(sum(expr1*expr2)-sum(expr1)*sum(expr2)/n)/n”
+
+ 
+
+Select COVAR_POP(column1,column2) from emp;
+
+--------------------------------------------------
+
+ 
+
+COVAR_SAMP
+
+语法:COVAR_SAMP(expr1,expr2)
+
+功能:返回成对数字的协方差，其数值使用表达式”(sum(expr1*expr2)-sum(expr1)*sum(expr2)/n)/n-1”
+
+ 
+
+Select COVAR_SAMP(column1,column2) from emp;
+
+--------------------------------------------------
+
+ 
+
+CUME_DIST
+
+语法:CUME_DIST(expr1,expr2…) within group (order by expr1,expr2…)
+
+功能:返回特定数值在一组行数据中的累积分布比例。
+
+ 
+
+Select CUME_DIST(2000) within group (order by sel) from emp;
+
+--------------------------------------------------
+
+ 
+
+DENSE_RANK
+
+语法:DENSE_RANK(expr1,expr2…) within group (order by expr1,expr2…)
+
+功能:返回特定数据在一组行数据中的等级。
+
+ 
+
+Select DENSE_RANK (5000) within group (order by sel) from emp;
+
+--------------------------------------------------
+
+ 
+
+FIRST
+
+语法:FIRST
+
+功能:9i新增，不能单独使用，必须与其他分组函数结合使用。通过使用该函数，可以取得排序等级的第一级，然后然后使用分组函数汇总该等级的数据。
+
+ 
+
+Select min(sal) keep (dense_rank first order by comm desc) from emp;
+
+--------------------------------------------------
+
+ 
+
+GROUP_ID
+
+语法:GROUP_ID
+
+功能:9i新增，用于区分分组结果中的重复行。
+
+ 
+
+Select deptno,job,avg(sal),group_id() from emp group by deptno,rollup(deptno,job);
+
+--------------------------------------------------
+
+ 
+
+GROUPING
+
+语法：GROUPING(expr)
+
+功能:用于确定统计结果是否使用了特定的表达式，返回0则用到了表达式，1则未用。
+
+例如:select corp_code,org_level,count(1),
+
+       grouping(corp_code),
+
+       grouping(org_level)
+
+  from tb_sys_organization
+
+group by rollup(corp_code, org_level);
+
+ 
+
+select case grouping(corp_code)
+
+         when 1 then 'all_corp' else corp_code end corp_code,
+
+       case grouping(org_level)
+
+         when 1 then 'all_org' else org_level end org_level,
+
+       count(1)
+
+  from tb_sys_organization
+
+group by rollup(corp_code, org_level);
+
+--------------------------------------------------
+
+ 
+
+GROUPING_ID
+
+语法:GROUPING_ID(expr1[,expr2]…)
+
+功能:9i新增，用于返回对应于特定行的grouping位向量的值。
+
+ 
+
+Select deptno,job,sum(sal),grouping_id(job,deptno) from emp group by rollup(deptno,jon)
+
+--------------------------------------------------
+
+ 
+
+GLB
+
+语法:GLB ([DISTINCT|ALL]label)
+
+功能:获得由label界定的最大下界.函数仅用于trusted oracle.
+
+使用位置:trusted数据库的选择列表和GROUP BY子句.
+
+--------------------------------------------------
+
+ 
+
+LAST
+
+语法:LAST
+
+功能:9i新增，不能单独使用，必须与其他分组函数结合使用。通过使用该函数，可以取得排序等级的最后一级，然后使用分组函数汇总该等级的数据。
+
+ 
+
+Select min(sal) keep (dense_rank last order by comm) from emp;
+
+--------------------------------------------------
+
+ 
+
+LISTAGG
+
+语法:listagg
+
+功能:列转行
+
+select listagg(o.rybs, ';') within group(order by o.rybs)
+
+  from gk_xszrr o
+
+ where rownum <= 100;
+
+----------------------------------------------------
+
+ 
+
+LUB
+
+语法:LUB ([DISTINCT|ALL]label)
+
+功能:获得由label界定的最小上界.用于trusted oracle.数据库.
+
+使用位置:trusted数据库的选择列表和GROUP BY子句.过程性语言和SQL语句。
+
+--------------------------------------------------
+
+ 
+
+MAX
+
+语法:MAX([DISTINCT|ALL]col)
+
+功能:获得选择列表或表达式的最大值，ALL表示对所有的值求最大值,DISTINCT表示对不同的值求最大值,相同的只取一次
+
+使用位置:仅用于查询选择和GROUP BY子句.
+
+ 
+
+SQL> select max(distinct sal) from scott.emp;
+
+ 
+
+MAX(DISTINCTSAL)
+
+            5000
+
+--------------------------------------------------
+
+ 
+
+MIN
+
+语法:MIN([DISTINCT|ALL]col)
+
+功能:获得选择列表或表达式的最小值，ALL表示对所有的值求最小值,DISTINCT表示对不同的值求最小值,相同的只取一次
+
+使用位置:仅用于查询选择和GROUP BY子句.
+
+ 
+
+SQL> select min(all sal) from gao.table3;
+
+ 
+
+MIN(ALLSAL)
+
+    1111.11
+
+--------------------------------------------------
+
+ 
+
+PERCENT_RANK
+
+语法:PERCENT_RANK(expr1,expr2…)WITHIN GROUP (ORDER BY expr1,expr2…)
+
+功能:该函数用于返回特定数值在统计级别中所占的比例。
+
+ 
+
+SQL> select percent_rank(3000) within group(order by sal) from emp;
+
+--------------------------------------------------
+
+ 
+
+PERCENTILE_CONT
+
+语法:PERCENTILE_CONT(percent_expr)WITHIN GROUP (ORDER BY expr)
+
+功能:9i新增，用于返回在统计级别中处于某个百分点的特定数值（按照连续分布模型确定）。
+
+ 
+
+SQL> select percentile_cont(.6) within group(order by sal) from emp;
+
+--------------------------------------------------
+
+ 
+
+PERCENTILE_DISC
+
+语法:PERCENTILE_DISC(percent_expr)WITHIN GROUP (ORDER BY expr)
+
+功能:9i新增，用于返回在统计级别中处于某个百分点的特定数值（按照离散分布模型确定）。
+
+ 
+
+SQL> select percentile_cont(.6) within group(order by sal) from emp;
+
+--------------------------------------------------
+
+ 
+
+RANK
+
+语法:RANK(expr1,expr2…)WITHIN GROUP (ORDER BY expr1,expr2…)
+
+功能:该函数用于返回特定数值中所占据的等级。
+
+ 
+
+SQL> select rank(3000) within group(order by sal) from emp;
+
+--------------------------------------------------
+
+ 
+
+STDDEV
+
+语法:STDDEV([DISTINCT|ALL]col)
+
+功能:获得选择列表的标准差.标准差为方差(VARIANCE)的平方根, ALL表示对所有的值求标准差,DISTINCT表示只对不同的值求标准差.
+
+使用位置:仅用于查询选择和GROUP BY子句.
+
+SQL> select stddev(sal) from scott.emp;
+
+ 
+
+STDDEV(SAL)
+
+  1182.5032
+
+ 
+
+SQL> select stddev(distinct sal) from scott.emp;
+
+ 
+
+STDDEV(DISTINCTSAL)
+
+           1229.951
+
+--------------------------------------------------
+
+ 
+
+STDDEV_POP
+
+语法:STDDEV_POP(col)
+
+功能:返回统计标准差，其数值是统计方差的平方根.
+
+使用位置:仅用于查询选择和GROUP BY子句.
+
+SQL> select stddev_pop(sal) from scott.emp;
+
+--------------------------------------------------
+
+ 
+
+STDDEV_SAMP
+
+语法:STDDEV_SAMP(col)
+
+功能:返回采样标准差，其数值是采样方差的平方根.
+
+SQL> select stddev_samp(sal) from scott.emp;
+
+--------------------------------------------------
+
+ 
+
+SUM
+
+语法:SUM([DISTINCT|ALL]col)
+
+功能:返回选择的数值和总和
+
+使用位置:仅用于查询选择和GROUP BY子句.
+
+Select sum(sal) from emp;
+
+--------------------------------------------------
+
+ 
+
+VAR_POP
+
+语法:VAR_POP([DISTINCT|ALL]col)
+
+功能:返回统计方差.使用公式为(sum(expr*expr)-sum(expr)*sum(expr)/count(expr))/(count(expr)
+
+使用位置:仅用于查询选择和GROUP BY子句.
+
+SQL> select VAR_POP (sal) from scott.emp;
+
+--------------------------------------------------
+
+ 
+
+VAR_SAMP
+
+语法:VAR_SAMP([col)
+
+功能:返回采样方差.使用公式为(sum(expr*expr)-sum(expr)*sum(expr)/count(expr))/(count(expr-1)
+
+使用位置:仅用于查询选择和GROUP BY子句.
+
+SQL> select variance(sal) from scott.emp;
+
+--------------------------------------------------
+
+ 
+
+VARIANCE
+
+语法:VARIANCE([DISTINCT|ALL]col)
+
+功能:返回选择列或表达式的采样方差.使用公式为(sum(expr*expr)-sum(expr)*sum(expr)/count(expr))/(count(expr-1)
+
+使用位置:仅用于查询选择和GROUP BY子句.
+
+SQL> select variance(sal) from scott.emp;
+
+ 
+
+VARIANCE(SAL)
+
+    1398313.9
+
+--------------------------------------------------
+
+ 
+
+分组函数，除了count(*)，count(1)，其他分组函数都会忽略null行，包括count(列名)。
+
+--------------------------------------------------
+
+ 
+
+ 
+
+F.7  集合函数
+
+(cardinality,collect,powermultiset,powermultiset_by_cardinality,set)
+
+ 
+
+说明：10g新增，为了扩展集合类型（嵌套表和VARRAY）的功能，新增的针对集合类型的函数。
+
+ 
+
+ 
+
+CARDINALITY
+
+语法:CARDINALITY (nested_table)
+
+功能:10g新增函数，返回嵌套表的实际元素个数。
+
+ 
+
+SQL> select product_id,CARDINALITY(ad_text) from a;
+
+--------------------------------------------------
+
+ 
+
+COLLECT
+
+语法:COLLECT (column)
+
+功能:10g新增函数，用于根据输入列和被选中行建立嵌套表结果。
+
+ 
+
+SQL> select cast(COLLECT(ad_text) as t) from a;--t是嵌套表
+
+--------------------------------------------------
+
+ 
+
+POWERMULTISET
+
+语法:POWERMULTISET(expr)
+
+功能:10g新增函数，用于生成嵌套表的超集（包含所非空的嵌套表）。
+
+ 
+
+SQL> select cast(POWERMULTISET (ad_text) as t) from a;--t是嵌套表
+
+--------------------------------------------------
+
+ 
+
+POWERMULTISET_BY_CARDINALITY
+
+语法:POWERMULTISET_BY_CARDINALITY(expr,cardinatility)
+
+功能:10g新增函数，用于根据嵌套表和元素个数，生成嵌套表的超集（包含所非空的嵌套表）。
+
+ 
+
+SQL> select cast(POWERMULTISET_BY_CARDINALITY(ad_text) as t) from a;--t是嵌套表
+
+--------------------------------------------------
+
+ 
+
+SET
+
+语法:SET(nested_table)
+
+功能:改函数用于取消嵌套表中的重复结果，并生成新的嵌套表。
+
+ 
+
+SQL> select SET(nested_table) from a;
+
+--------------------------------------------------
+
+ 
+
+ 
+
+F.8  对象函数
+
+ 
+
+(deref,make_ref,ref,reftohex,value)
+
+ 
+
+ 
+
+说明：对象函数用于操纵REF对象。REF对象实际是指对象类型数据的指针。
+
+ 
+
+ 
+
+DEREF
+
+语法:DEREF(expr)
+
+功能:该函数用于返回参照对象exp所引用的对象实例。
+
+ 
+
+SQL> select DEREF(address).city from table_name;
+
+--------------------------------------------------
+
+ 
+
+MAKE_REF
+
+语法:MAKE_REF(object_table|object_view,key)
+
+功能:该函数可以基于对象视图或对象表（存在基于主键的对象标识符）的一行数据建立REF。
+
+ 
+
+SQL> select MAKE_REF(oc_inventocies,3003) from dual;
+
+--------------------------------------------------
+
+ 
+
+REF
+
+语法:REF(expr)
+
+功能:该函数用于返回对象行所对应的REF值。
+
+ 
+
+SQL> select REF(e) from table_name e;
+
+--------------------------------------------------
+
+ 
+
+REFTOHEX
+
+语法:REFTOHEX(expr)
+
+功能:该函数用于将REF值转变为十六进制字符串。
+
+ 
+
+SQL> select REFTOHEX(REF(e)) from table_name e;
+
+--------------------------------------------------
+
+ 
+
+VALUE
+
+语法:VALUE(expr)
+
+功能:该函数用于返回行对象所对应的对象实例数据，其中expr用于指定行对象的别名。
+
+ 
+
+SQL> select value(e).city from table_name e;
+
+--------------------------------------------------
+
+ 
+
+ 
+
+F.9  其他函数
+
+ 
+
+(bfilename,coalesce,decode,depth,dump,empty_clob/empty_blob,existsnode,extract,extractvalue,greatest,greatest_lb,least,least_ub,nls_charset_decl_len,nls_charser_id,nls_charser_name,nullif,nvl2,over,path,sys_connect_by_path,sys_context,sys_dburigen,sys_guid,sys_typeid,sys_xmlagg,sys_xmlgen,uid,updatexml,user,userenv,vsize,xmlagg,xmlcolatival,xmlconcat,xmlelement,xmlforest,xmlsequence,xmltransform)
+
+ 
+
+说明：除了上述涉及的函数外，Oracle还提供了一些单行函数。
+
+ 
+
+ 
+
+BFILENAME
+
+语法: BFILENAME(directory,file_name)
+
+功能:获得操作系统中与物理文件file_name相关的BFILE位置指示符. Directory是与OS路径相关的DIRECTORY类型对象，file_name是OS文件的名称。
+
+使用位置:过程性语言和SQL语句。
+
+ 
+
+SQL>insert into file_tb1 values(bfilename('lob_dir1','image1.gif'));
+
+--------------------------------------------------
+
+ 
+
+COALESCE
+
+语法:COALESCE(exp1,exp2,exp3,...)
+
+功能:9i新增，依次查找各参数，遇到非NULL则返回，各参数或表达式数据类型必须一致，如果都为null则返回null。
+
+ 
+
+Select COALESCE(v_e1,v_e2) from a;
+
+--------------------------------------------------
+
+ 
+
+DECODE
+
+语法:DECODE(base_expr,comparel,valuel,Compare2,value2,…default)
+
+功能:把base_expr与后面的每个compare(n)进行比较,如果匹配返回相应的value (n).如果没有发生匹配,则返回default，每个valuel数据类型必须一致，如果没有default则返回null。
+
+ 
+
+Select decode(a,’金’,1,’银’,2,0) from table_name;
+
+--------------------------------------------------
+
+ 
+
+DEPTH
+
+语法:DEPTH(n)
+
+功能:9i新增，用于返回xml方案under_path路径所对应的相对层数，其中参数n用于指定相对层数。
+
+ 
+
+Select fath(1),depth(2) from a;
+
+--------------------------------------------------
+
+ 
+
+DUMP
+
+语法:DUMP(expr[,number_format[,start_position][,length]])
+
+功能:获得有关expr的内部表示信息的VARCHAR2类型的数值. number_format指定了按照下面返回数值的基数(base):
+
+number_format    结果
+
+8                八进制表示
+
+10               十进制表示
+
+16               十六进制表示
+
+17               单字符
+
+默认的值是十进制.
+
+如果指定了start_position和length,那么返回从start_position开始的长为length的字节.缺省返回全部.
+
+数据类型按照下面规定的内部数据类型的编码作为一个数字进行返回.
+
+代码    数据类型
+
+1       VARCHAR2
+
+2       NUMBER
+
+8       LONG
+
+12      DATE
+
+23      RAW
+
+69      ROWID
+
+96      CHAR
+
+106     MLSLABEL
+
+ 
+
+SQL> col global_name for a30
+
+SQL> col dump_string for a50
+
+SQL> set lin 200
+
+SQL> select global_name,dump(global_name,1017,8,5) dump_string from global_name;
+
+ 
+
+GLOBAL_NAME                    DUMP_STRING
+
+ORACLE.WORLD                   Typ=1 Len=12 CharacterSet=ZHS16GBK: W,O,R,L,D
+
+--------------------------------------------------
+
+ 
+
+EMPTY_CLOB/EMPTY_BLOB
+
+语法:EMPTY_CLOB()
+
+     EMPTY_BLOB()
+
+功能:获得一个空的LOB提示符(locator) .EMOTY_CLOB返回一个字符指示符,而EMPTY_BLOB返回一个二进制指示符, 用来对大数据类型字段进行初始化操作的函数.
+
+使用位置:过程性语言和SQL语句.
+
+ 
+
+Select EMPTY_CLOB() from dual;
+
+--------------------------------------------------
+
+ 
+
+EXISTSNODE
+
+语法:EXISTSNODE(XMLType_instance,Xpatgh_string)
+
+功能:9i新增，用于确认xml节点路径是否存在，返回0表示不存在，1表示存在。.
+
+使用位置:过程性语言和SQL语句.
+
+ 
+
+Select EXISTSNODE(value(p),’/purchar/user’) from p;
+
+--------------------------------------------------
+
+ 
+
+EXTRACT
+
+语法:EXTRACT (XMLType_instance,Xpatgh_string)
+
+功能:9i新增，用于返回xml节点路径下的相应内容。.
+
+使用位置:过程性语言和SQL语句.
+
+ 
+
+Select EXTRACT (value(p),’/purchar/user’) from p;
+
+--------------------------------------------------
+
+ 
+
+EXTRACTVALUE
+
+语法:EXTRACTVALUE(XMLType_instance,Xpatgh_string)
+
+功能:9i新增，用于返回xml节点路径下的值。.
+
+使用位置:过程性语言和SQL语句.
+
+ 
+
+Select EXTRACTVALUE(value(p),’/purchar/user’) from p;
+
+--------------------------------------------------
+
+ 
+
+GREATEST
+
+语法:GREATEST(expr1[,expr2]…)
+
+功能:计算参数中最大的表达式.所有表达式的比较类型以expr1为准，比较字符的编码大小。
+
+使用位置:过程性语言和SQL语句.
+
+ 
+
+SQL> select greatest('AA','AB','AC') from dual;
+
+ 
+
+GR
+
+AC
+
+SQL> select greatest('啊','安','天') from dual;
+
+ 
+
+GR
+
+安
+
+--------------------------------------------------
+
+ 
+
+GREATEST_LB
+
+语法:GREATEST_LB(label1[,label2]…)
+
+功能:返回标签(label)列表中最大的下界.每个标签必须拥有数据类型MLSLABEL、RAWMLSLABEL或者是一个表因字符串文字.函数只能用于truested oracle库.
+
+使用位置:过程性语言和SQL语句.
+
+--------------------------------------------------
+
+ 
+
+LEAST
+
+语法:LEAST(expr1[,expr2]…)
+
+功能:计算参数中最小的表达式.所有表达式的比较类型以expr1为准，比较字符的编码大小。
+
+使用位置:过程性语言和SQL语句.
+
+ 
+
+SQL> select least('啊','安','天') from dual;
+
+ 
+
+LE
+
+啊
+
+--------------------------------------------------
+
+ 
+
+LEAST_UB
+
+语法:LEAST_UB(label1[,label2]…)
+
+功能:与GREATEST_UB函数相似,本函数返回标签列表的最小上界.
+
+使用位置:过程性语言和SQL语句.
+
+--------------------------------------------------
+
+ 
+
+NLS_CHARSET_DECL_LEN
+
+语法:NLS_CHARSET_DECL_LEN(byte_count,charset_id)
+
+功能:该函数用于返回字节数在特定字符集中占有的字符个数。
+
+ 
+
+select NLS_CHARSET_DECL_LEN(200,nls_charset_id(‘zhs16gbkf1xed’)) from dual;
+
+--------------------------------------------------
+
+ 
+
+NLS_CHARSET_ID
+
+语法:NLS_CHARSET_ID(text)
+
+功能:该函数用于返回字符集的ID号。
+
+ 
+
+select NLS_CHARSET_ID( ‘zhs16gbkf1xed’) from dual;
+
+--------------------------------------------------
+
+ 
+
+NLS_CHARSET_NAME
+
+语法:NLS_CHARSET_NAME(number)
+
+功能:该函数用于返回字符集ID号所对应的字符集名。
+
+ 
+
+select NLS_CHARSET_NAME(852) from dual;
+
+--------------------------------------------------
+
+ 
+
+NULLIF
+
+语法:NULLIF (expr1, expr2) ->相等返回NULL，不等返回expr1
+
+功能：9i新增，用于比较表达式expr1和expr2，相等返回null，否则返回expr1.
+
+Select nullif(expr1, expr2) from table_name;
+
+--------------------------------------------------
+
+ 
+
+NVL
+
+语法:NVL (expr1, expr2)
+
+功能:用于将NULL转变为实际值，如果expr1是NULL,那么返回expr2,否则返回expr1，expr1、expr2两者必须为同类型或expr2可以隐式转换为expr1，否则会报错。
+
+ 
+
+Select nvl(column_name,0) from tbale_name;
+
+特别的date可以隐式转换为number，所以下面正确
+
+SELECT NVL(to_date('2017-01-01','yyyy-mm-dd')-sysdate,SYSDATE)
+
+  FROM dual;
+
+--------------------------------------------------
+
+ 
+
+NVL2
+
+语法:NVL2 (expr1, expr2, expr3)
+
+功能:9i新增，expr1不为NULL，返回expr2；expr1为NULL，返回expr3。expr1可以是任意数据类型；expr2与expr3可以是除LONG外的任意数据类型，但需要类型一致或expr3可以隐式转换为expr2。
+
+ 
+
+特别的date可以隐式转换为number，所以下面正确
+
+SELECT NVL2(to_date('01-jun-2016'),sysdate - to_date('01-jun-2016'),sysdate)
+
+  FROM dual;
+
+--------------------------------------------------
+
+ 
+
+OVER
+
+语法：sun/count ( * )
+
+          over ( partition by XXX
+
+      order by XXX )
+
+功能：此函数为分析函数，有别于本文介绍中的其他函数，更详细看本博客“分析函数”专题
+
+使用位置：过程性语言和SQL语句
+
+ 
+
+sum(sal) over (partition by deptno order by ename)
+
+ 
+
+COUNT( * )
+
+OVER (
+
+PARTITION BY class_id
+
+ORDER BY ROWNUM
+
+ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW)
+
+COUNT( * )
+
+OVER (PARTITION BY e.phone
+
+ORDER BY pp.sort, qs.user_id DESC, ROWNUM
+
+ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW)
+
+--------------------------------------------------
+
+ 
+
+PATH
+
+语法:PATH(correction_integer)
+
+功能:9i新增，用于返回特定XML资源所对应的相对路径。
+
+ 
+
+Select path(1),depth(2) from table_name;
+
+--------------------------------------------------
+
+ 
+
+SYS_CONNECT_BY_PATH
+
+语法:SYS_CONNECT_BY_PATH(column,char)
+
+功能:9i新增（只适用于层次查询），用于返回从根到节点的列值路径。
+
+ 
+
+Select lpad(‘ ‘,2*level-1)||sys_connect_by_path(ename,’/’) from table_name start with ename=’scott’ connect by prior empno=mgr;
+
+--------------------------------------------------
+
+ 
+
+SYS_CONTEXT
+
+语法：sys_coniext(‘context’,’attribute’)
+
+功能：该函数用于返回应用上下文的特定属性值，获得系统信息，其中context为上下文名，而attribute为应用上下文名，此函数可以得到oracle主机及客户端的信息。
+
+ 
+
+SELECT   SYS_CONTEXT ('USERENV', 'TERMINAL') 客户端名称,
+
+         SYS_CONTEXT ('USERENV', 'LANGUAGE') 客户端语言,
+
+         SYS_CONTEXT ('USERENV', 'SESSIONID') sessionid,
+
+         SYS_CONTEXT ('USERENV', 'INSTANCE') instance,
+
+         SYS_CONTEXT ('USERENV', 'ENTRYID') entryid,
+
+         SYS_CONTEXT ('USERENV', 'ISDBA') isdba,
+
+         SYS_CONTEXT ('USERENV', 'NLS_TERRITORY') 地区,
+
+         SYS_CONTEXT ('USERENV', 'NLS_CURRENCY') 货币,
+
+         SYS_CONTEXT ('USERENV', 'NLS_CALENDAR') nls_calendar,
+
+         SYS_CONTEXT ('USERENV', 'NLS_DATE_FORMAT') 时间格式,
+
+         SYS_CONTEXT ('USERENV', 'NLS_DATE_LANGUAGE') 时间语言,
+
+         SYS_CONTEXT ('USERENV', 'NLS_SORT') nls_sort,
+
+         SYS_CONTEXT ('USERENV', 'CURRENT_USER') current_user,
+
+         SYS_CONTEXT ('USERENV', 'CURRENT_USERID') current_userid,
+
+         SYS_CONTEXT ('USERENV', 'SESSION_USER') session_user,
+
+         SYS_CONTEXT ('USERENV', 'SESSION_USERID') session_userid,
+
+         SYS_CONTEXT ('USERENV', 'PROXY_USER') proxy_user,
+
+         SYS_CONTEXT ('USERENV', 'PROXY_USERID') proxy_userid,
+
+         SYS_CONTEXT ('USERENV', 'DB_DOMAIN') db_domain,
+
+         SYS_CONTEXT ('USERENV', 'DB_NAME') 数据库名称,
+
+         SYS_CONTEXT ('USERENV', 'HOST') 客户端完成名称,
+
+         SYS_CONTEXT ('USERENV', 'OS_USER') 客户端用户,
+
+         SYS_CONTEXT ('USERENV', 'EXTERNAL_NAME') external_name,
+
+         SYS_CONTEXT ('USERENV', 'IP_ADDRESS') 客户端IP地址,
+
+         SYS_CONTEXT ('USERENV', 'NETWORK_PROTOCOL') 网络协议,
+
+         SYS_CONTEXT ('USERENV', 'BG_JOB_ID') bg_job_id,
+
+         SYS_CONTEXT ('USERENV', 'FG_JOB_ID') fg_job_id,
+
+         SYS_CONTEXT ('USERENV', 'AUTHENTICATION_TYPE') authentication_type,
+
+         SYS_CONTEXT ('USERENV', 'AUTHENTICATION_DATA') authentication_data
+
+  FROM   DUAL
+
+--------------------------------------------------
+
+ 
+
+SYS_DBURIGEN
+
+语法:SYS_DBURIGEN(column)
+
+功能:9i新增，根据列或属性生产类型为DBUriType的URL。
+
+ 
+
+Select SYS_DBURIGEN(ename) from emp;
+
+--------------------------------------------------
+
+ 
+
+SYS_GUID
+
+语法:SYS_GUID()
+
+功能:该函数用于生产类型为RAW的16字节的唯一标识符，每次调用该函数都会发生不同的RAW数据。
+
+ 
+
+Select SYS_GUID() from emp;
+
+--------------------------------------------------
+
+ 
+
+SYS_TYPEID
+
+语法:SYS_TYPEID(object_type_value)
+
+功能:该函数用于返回唯一的类型ID值。
+
+ 
+
+Select name, SYS_TYPEID(value(p)) from emp p;
+
+--------------------------------------------------
+
+ 
+
+SYS_XMLAGG
+
+语法:SYS_XMLAGG(expr[,fmt])
+
+功能:9i新增，用户汇总所有XML文档，并生成一个XML文档。
+
+ 
+
+Select SYS_XMLAGG(sys_xmlgen(ename)) from emp p;
+
+--------------------------------------------------
+
+ 
+
+SYS_XMLGEN
+
+语法:SYS_XMLGEN(expr[,fmt])
+
+功能:9i新增，根据数据库表的行和列生成一个XMLType实例。
+
+ 
+
+Select sys_xmlgen(ename) from emp p;
+
+--------------------------------------------------
+
+ 
+
+UID
+
+语法:UID
+
+功能:获得当前数据库用的惟一标识,标识是一个整数.
+
+使用位置:过程性语言和SQL语句.
+
+ 
+
+SQL> show user
+
+USER 为"GAO"
+
+SQL> select username,user_id from dba_users where user_id=uid;
+
+ 
+
+USERNAME                         USER_ID
+
+GAO                                   25
+
+--------------------------------------------------
+
+ 
+
+UPDATEXML
+
+语法:UPDATEXML(XMLType_instance,Xpath_string,value_expr)
+
+功能:9i新增，用于更新特定XMLType实例相对应节点路径的内容。
+
+ 
+
+Update xmltable p set p=updatexml(value(p),’/pruch/user/text()’,’scott’)
+
+--------------------------------------------------
+
+ 
+
+USER
+
+语法:USER
+
+功能:取得当前oracle用户的名字,返回的结果是一个VARCHAR2型字符串.
+
+使用位置:过程性语言和SQL语句.
+
+SQL> select user from  dual;
+
+ 
+
+USER
+
+GAO
+
+--------------------------------------------------
+
+ 
+
+USERENV
+
+语法:USERENV(option)
+
+功能:根据参数option,取得一个有关当前会话信息的VARCHAR2数值.
+
+使用位置:过程性语言和SQL语句.
+
+返回当前用户环境的信息,opt可以是:
+
+ENTRYID,SESSIONID,TERMINAL,ISDBA,LABLE,LANGUAGE,CLIENT_INFO,LANG,VSIZE
+
+OPTION='ISDBA'若当前是DBA角色,则为TRUE,否则FALSE.
+
+OPTION='LANGUAGE'返回数据库的字符集.
+
+OPTION='SESSIONID'为当前会话标识符.
+
+OPTION='ENTRYID'返回可审计的会话标识符.
+
+OPTION='LANG'返回会话语言名称的ISO简记.
+
+OPTION='INSTANCE'返回当前的实例.
+
+OPTION='terminal'返回当前计算机名
+
+ISDBA  查看当前用户是否是DBA如果是则返回true
+
+SQL> select userenv('isdba') from dual;
+
+USEREN
+
+FALSE
+
+ 
+
+SESSION返回会话标志
+
+SQL> select userenv('sessionid') from dual;
+
+USERENV('SESSIONID')
+
+                 152
+
+ 
+
+ENTRYID返回会话人口标志
+
+SQL> select userenv('entryid') from dual;
+
+USERENV('ENTRYID')
+
+                 0
+
+               
+
+INSTANCE返回当前INSTANCE的标志
+
+SQL> select userenv('instance') from dual;
+
+USERENV('INSTANCE')
+
+                  1
+
+ 
+
+LANGUAGE返回当前环境变量，包括语言、地区、字符集
+
+SQL> select userenv('language') from dual;
+
+USERENV('LANGUAGE')
+
+SIMPLIFIED CHINESE_CHINA.ZHS16GBK
+
+ 
+
+LANG返回当前环境的语言的缩写
+
+SQL> select userenv('lang') from dual;
+
+USERENV('LANG')
+
+ZHS
+
+ 
+
+TERMINAL返回用户的终端或机器的OS标示符
+
+SQL> select userenv('terminal') from dual;
+
+USERENV('TERMINA
+
+GAO
+
+ 
+
+CLIENT_INFO 返回由包DBMS_APPLICATION_INFO所存储的用户会话信息（64字节）
+
+Select userenv(‘CLIENT_INFO’) from dual;
+
+--------------------------------------------------
+
+ 
+
+VSIZE
+
+语法:VSIZE(value)
+
+功能:获得value的内部表示的字节数.如果value是NULL,结果是NULL.
+
+使用位置: SQL语句.
+
+ 
+
+SQL> select vsize(user),user from dual;
+
+VSIZE(USER) USER
+
+          6 SYSTEM
+
+--------------------------------------------------
+
+ 
+
+XMLAGG
+
+语法:XMLAGG(XMLType_instance [order by sort_list])
+
+功能:9i新增，用于汇总多个XML块，并生成XML文档。
+
+ 
+
+Select xmlagg(xmlelement(“employee”,ename||’ ’||sal)) from emp where deptno=10;
+
+--------------------------------------------------
+
+ 
+
+XMLCOLATTVAL
+
+语法:XMLCOLATTVAL(value_expr1[,value_expr2]…)
+
+功能:9i新增，用于生成XML块，并增加”column”作为属性名。
+
+ 
+
+Select xmlelement(“emp”, XMLCOLATTVAL(ename,sall)) from emp where deptno=10;
+
+--------------------------------------------------
+
+ 
+
+XMLCONCAT
+
+语法:XMLCONCAT(XMLType_instance1[,XMLType_instance2]…)
+
+功能:9i新增，用于连接多个XMLType实例，并生成一个新的XMLType实例。
+
+ 
+
+Select XMLCONCAT(xmlelement(‘ename’,ename), xmlelement(‘sal’,sal)) from emp where deptno=10;
+
+--------------------------------------------------
+
+ 
+
+XMLELEMENT
+
+语法:XMLELEMENT(identifier[,xml_attribute_clause][,value_expr])
+
+功能:9i新增，用于返回XMLType实例，其中参数identifier指定元素名，参数xml_attribute_clause指定元素属性子句，参数value_expr指定元素值。
+
+ 
+
+Select XMLELEMENT(‘date’,sysdate) from dual;
+
+ 
+
+Select XMLELEMENT(“emp”,xmlattributes(empno as “id”,ename)) from emp;
+
+--------------------------------------------------
+
+ 
+
+XMLFOREST
+
+语法:XMLPOREST(value_expr1[,value_expr2]…)
+
+功能:9i新增，用于返回XML块。
+
+ 
+
+Select xmlelement(‘ename’, XMLPOREST[ename,sal]) from emp where deptno=10;
+
+--------------------------------------------------
+
+ 
+
+XMLSEQUENCE
+
+语法:XMLSEQUENCE(xmltype_instance)
+
+功能:9i新增，用于返回xmltype实例中顶级节点一下的varray元素。
+
+ 
+
+Select XMLSEQUENCE(extract(value(x),’/purorder/line/*’)) from emp p where deptno=10;
+
+--------------------------------------------------
+
+ 
+
+XMLTRANSFORM
+
+语法:XMLTRANSFORM(xmltype_instance,xsl_ss)
+
+功能:9i新增，用于将xmltype实例按照XSL样式进行转换，并生成新的xmltype实例。
+
+ 
+
+Select XMLTRANSFORM(w.warehouse_spec,x.coll).getclobval from warehouse w,xsl_tab x where w.name=x.name;
+
+--------------------------------------------------
