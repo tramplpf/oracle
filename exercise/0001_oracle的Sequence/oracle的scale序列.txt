@@ -1,0 +1,20 @@
+特性增强： 可扩展序列分散索引竞争
+在Scaleable Sequence 中指定SCALE时，在传统的序列前面增加了6位数字
+* 前三位是由RAC 里的实例号产生
+* 随后三位由Session 的SID产生
+
+SQL> create sequence seq_eygle start with 1 increment by 1 scale; 
+
+
+SQL> select seq_eygle.nextval from dual; 
+	***---00000000.....1 
+
+SQL> select instance_number from v$instance; 
+	1 
+
+SQL > select sid from v$mystat where rownum = 1; 
+		
+SQL > select sid from v$mystat where rownum  = 1 ;
+
+SQL > select  seq_eygle.nextval from dual; 
+
