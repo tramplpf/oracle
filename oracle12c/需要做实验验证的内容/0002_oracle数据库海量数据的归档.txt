@@ -1,0 +1,16 @@
+oracle数据库海量数据的归档
+oracle数据库对于海量数据的归档(上千万条数据)的归档的时候，首先要考虑临时表空间的占用，同时要考虑性能问题。 同时要避免产生大量的redo日志，将系统弄蹦。 
+
+注意： 不能直接使用 insert into table1 select *　from table2；
+
+关于insert /*+ append */我们需要注意以下三点： a、非归档模式下，只需append就能大量减少redo的产生；归档模式下，只有append+nologging才能大量减少redo。 b、insert /*+ append */时会对表加锁（排它锁），会阻塞表上的除了select以外所有DML语句；传统
+关于insert /*+ append */我们需要注意以下三点：
+
+a、非归档模式下，只需append就能大量减少redo的产生；归档模式下，只有append+nologging才能大量减少redo。
+b、insert /*+ append */ 时会对表加锁（排它锁），会阻塞表上的除了select以外所有DML语句；传统的DML在TM enqueue上使用模式3（row exclusive），其允许其他DML在相同的模式上获得TM enqueue。但是直接路径加载在TM enqueue使用模式6（exclusive），这使其他DML在直接路径加载期间将被阻塞。
+c、insert /*+ append */ 直接路径加载，速度比常规加载方式快。因为是从HWM的位置开始插入，也许会造成空间浪费。
+
+
+
+相关的参考资料：
+https://blog.csdn.net/xiaobluesky/article/details/50494101 

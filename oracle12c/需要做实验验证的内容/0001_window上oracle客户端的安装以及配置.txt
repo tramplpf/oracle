@@ -1,0 +1,6 @@
+0001_windows 系统上安装连接oracle客户端的软件 
+
+在window系统上面要安装连接oracle数据库的客户端plsql， 首先需要安装 oracle 客户端--oracle instant。 
+安装之后，
+需要设置相关的环境变量 ORACLE_HOME 以及TNS_ADMIN, 其中ORACLE_HOME 的取值指向ORACLE 客户端的安装路径。 而TNS_ADMIN 的取值执行 tnsnames.ora 文件。 同时设置 path的取值为： 指向 sqlplus.exe 例如：D:\software\oracle\Instant\Instant Client\bin
+

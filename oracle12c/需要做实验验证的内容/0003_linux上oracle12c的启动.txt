@@ -1,0 +1,8 @@
+0003_linux 上oracle 12c 数据库的启动 
+
+通过oracle用户名登录linux系统
+连接oracle数据库 
+$ > sqlplus / as sysdba 
+启动oracle数据库
+SQL > startup 
+
