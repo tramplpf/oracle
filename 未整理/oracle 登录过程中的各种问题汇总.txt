@@ -1,0 +1,6 @@
+oracle 登录过程中的各种问题汇总：
+
+ORA-01017: invalid username/password; logon denied   
+	很有可能是用户名密码错误(oracle数据库登录的时候是大小写敏感的)
+
+	

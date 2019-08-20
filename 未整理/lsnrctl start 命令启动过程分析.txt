@@ -1,0 +1,3 @@
+lsnrctl start 命令启动过程分析
+
+lsnrctl 启动的时候，会读取 $TNS_ADMIN 目录下的listner.ora 配置文件中的信息来启动监听
