@@ -1,0 +1,6 @@
+01_windows 系统安装配置plsql客户端 
+在安装oracle的客户端plsql之前，需要手动安装oracle client 客户端。 安装之后，需要配置环境变量
+ORACLE_HOME，以及TNS_ADMIN 
+其中ORACLE_HOME的取值是D:\app\product\11.2.0\dbhome_1 这里是oracle软件安装的目录。
+而 TNS_ADMIN 的路径是 D:\app\product\11.2.0\dbhome_1\NETWORK\ADMIN\ 该目录是tnsadmins.ora 文件所在的目录 
+
