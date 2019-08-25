@@ -1,0 +1,144 @@
+CREATE TABLE CUSTOMERS  
+(  
+  CUSTOMER_ID        NUMBER(6),  
+  CUST_FIRST_NAME    VARCHAR2(20 BYTE) CONSTRAINT CUST_FNAME_NN NOT NULL,  
+  CUST_LAST_NAME     VARCHAR2(20 BYTE) CONSTRAINT CUST_LNAME_NN NOT NULL,  
+  CUST_ADDRESS       VARCHAR2(128),  
+  PHONE_NUMBERS      VARCHAR2(20),  
+  NLS_LANGUAGE       VARCHAR2(3 BYTE),  
+  NLS_TERRITORY      VARCHAR2(30 BYTE),  
+  CREDIT_LIMIT       NUMBER(9,2),  
+  CUST_EMAIL         VARCHAR2(30 BYTE),  
+  ACCOUNT_MGR_ID     NUMBER(6),  
+  CUST_GEO_LOCATION  VARCHAR2(128),  
+  DATE_OF_BIRTH      DATE,  
+  MARITAL_STATUS     VARCHAR2(20 BYTE),  
+  GENDER             VARCHAR2(1 BYTE),  
+  INCOME_LEVEL       VARCHAR2(20 BYTE)  
+)  
+
+
+COMMENT ON TABLE CUSTOMERS IS 'Contains customers data either entered by an employee or by the customer  
+him/herself over the Web.';  
+COMMENT ON COLUMN CUSTOMERS.ACCOUNT_MGR_ID IS 'References hr.employees.employee_id.';  
+COMMENT ON COLUMN CUSTOMERS.CUST_GEO_LOCATION IS 'SDO (spatial) column.';  
+COMMENT ON COLUMN CUSTOMERS.CUSTOMER_ID IS 'Primary key column.';  
+COMMENT ON COLUMN CUSTOMERS.CUST_FIRST_NAME IS 'NOT NULL constraint.';  
+COMMENT ON COLUMN CUSTOMERS.CUST_LAST_NAME IS 'NOT NULL constraint.';  
+COMMENT ON COLUMN CUSTOMERS.CUST_ADDRESS IS 'Object column of type address_typ.';  
+COMMENT ON COLUMN CUSTOMERS.PHONE_NUMBERS IS 'Varray column of type phone_list_typ';  
+COMMENT ON COLUMN CUSTOMERS.CREDIT_LIMIT IS 'Check constraint.';
+
+
+
+CREATE UNIQUE INDEX CUSTOMERS_PK ON CUSTOMERS  
+(CUSTOMER_ID)  
+NOLOGGING  
+TABLESPACE EXAMPLE  
+PCTFREE    10  
+INITRANS   2  
+MAXTRANS   255  
+STORAGE    (  
+            INITIAL          64K  
+            NEXT             1M  
+            MINEXTENTS       1  
+            MAXEXTENTS       UNLIMITED  
+            PCTINCREASE      0  
+            BUFFER_POOL      DEFAULT  
+           )  
+NOPARALLEL;
+
+
+CREATE INDEX CUST_ACCOUNT_MANAGER_IX ON CUSTOMERS  
+(ACCOUNT_MGR_ID)  
+NOLOGGING  
+TABLESPACE EXAMPLE  
+PCTFREE    10  
+INITRANS   2  
+MAXTRANS   255  
+STORAGE    (  
+            INITIAL          64K  
+            NEXT             1M  
+            MINEXTENTS       1  
+            MAXEXTENTS       UNLIMITED  
+            PCTINCREASE      0  
+            BUFFER_POOL      DEFAULT  
+           )  
+NOPARALLEL;
+
+
+CREATE INDEX CUST_EMAIL_IX ON CUSTOMERS  
+(CUST_EMAIL)  
+NOLOGGING  
+TABLESPACE EXAMPLE  
+PCTFREE    10  
+INITRANS   2  
+MAXTRANS   255  
+STORAGE    (  
+            INITIAL          64K  
+            NEXT             1M  
+            MINEXTENTS       1  
+            MAXEXTENTS       UNLIMITED  
+            PCTINCREASE      0  
+            BUFFER_POOL      DEFAULT  
+           )  
+NOPARALLEL;
+
+
+CREATE INDEX CUST_LNAME_IX ON CUSTOMERS  
+(CUST_LAST_NAME)  
+NOLOGGING  
+TABLESPACE EXAMPLE  
+PCTFREE    10  
+INITRANS   2  
+MAXTRANS   255  
+STORAGE    (  
+            INITIAL          64K  
+            NEXT             1M  
+            MINEXTENTS       1  
+            MAXEXTENTS       UNLIMITED  
+            PCTINCREASE      0  
+            BUFFER_POOL      DEFAULT  
+           )  
+NOPARALLEL;
+
+
+CREATE INDEX CUST_UPPER_NAME_IX ON CUSTOMERS  
+(UPPER("CUST_LAST_NAME"), UPPER("CUST_FIRST_NAME"))  
+NOLOGGING  
+TABLESPACE EXAMPLE  
+PCTFREE    10  
+INITRANS   2  
+MAXTRANS   255  
+STORAGE    (  
+            INITIAL          64K  
+            NEXT             1M  
+            MINEXTENTS       1  
+            MAXEXTENTS       UNLIMITED  
+            PCTINCREASE      0  
+            BUFFER_POOL      DEFAULT  
+           )  
+NOPARALLEL;
+
+
+ALTER TABLE CUSTOMERS ADD ( 
+  CONSTRAINT CUSTOMER_CREDIT_LIMIT_MAX  
+ CHECK (credit_limit <= 5000),  
+  CONSTRAINT CUSTOMER_ID_MIN  
+ CHECK (customer_id > 0),  
+  CONSTRAINT CUSTOMERS_PK  
+ PRIMARY KEY  
+ (CUSTOMER_ID)  
+    USING INDEX  
+    TABLESPACE EXAMPLE  
+    PCTFREE    10  
+    INITRANS   2  
+    MAXTRANS   255  
+    STORAGE    (  
+                INITIAL          64K  
+                NEXT             1M  
+                MINEXTENTS       1  
+                MAXEXTENTS       UNLIMITED  
+                PCTINCREASE      0  
+               ));  
+

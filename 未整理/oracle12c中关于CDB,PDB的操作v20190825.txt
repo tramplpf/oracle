@@ -1,3 +1,11 @@
 oracle12c中关于CDB,PDB的操作
 
 SELECT CON_ID, NAME, OPEN_MODE FROM V$PDBS;
+
+
+
+select * from dba_users; 查看数据库里面所有用户，前提是你是有dba权限的帐号，如sys,system
+
+select * from all_users;  查看你能管理的所有用户！
+
+select * from user_users; 查看当前用户信息 ！

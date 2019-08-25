@@ -1,0 +1,282 @@
+
+
+TABLE_NAME
+--------------------------------------------------------------------------------
+ORG_AU_USER
+
+
+TABLE_NAME
+--------------------------------------------------------------------------------
+ORG_AU_USER
+
+
+TABLE_NAME
+--------------------------------------------------------------------------------
+ORG_AU_USER
+
+DEFINE X                = "THE ANSWERE IS 42" (CHAR)
+
+
+'THEANSWEREIS42'
+-----------------
+THE ANSWERE IS 42
+
+
+RESULT
+-----------------
+THE ANSWERE IS 42
+
+
+PL/SQL procedure successfully completed
+X
+---------
+HELLO
+
+X
+---------
+HELLO
+
+
+SELECCT :X, 'THE ANSWERE IS 42' FROM DUAL
+
+ORA-00900: invalid SQL statement
+X
+---------
+HELLO
+
+
+SELECCT :X, 'THE ANSWERE IS 42' FROM DUAL
+
+ORA-00900: invalid SQL statement
+X
+---------
+HELLO
+
+
+:X                                                                               'THEANSWEREIS42'
+-------------------------------------------------------------------------------- -----------------
+HELLO                                                                            THE ANSWERE IS 42
+X
+---------
+HELLO
+
+Not logged on
+
+
+DUMMY
+-----
+X
+
+Not logged on
+
+
+DUMMY
+-----
+X
+
+
+       TID LOGIN_NAME                                                       REAL_NAME                                                        PASSWD                                                                           CREATE_USRE                                                      CREATE_TIME OPERUSER                                                         LAST_UPDATE
+---------- ---------------------------------------------------------------- ---------------------------------------------------------------- -------------------------------------------------------------------------------- ---------------------------------------------------------------- ----------- ---------------------------------------------------------------- -----------
+
+
+Warning: Function created with compilation errors
+
+
+CREATE OR REPLACE FUNCITON wordcount (str IN VARCHAR2)
+       RETURN PLS_INTEGER
+AS
+/**words PLS_INTEGER := 0; ***Commented out for intentional error *** */
+       len PLS_INTEGER := NVL(LENGTH(str), 0)
+
+ORA-00922: missing or invalid option
+
+
+CREATE OR REPLACE FUNCITON wordcount (str IN VARCHAR2)
+       RETURN PLS_INTEGER
+AS
+/**words PLS_INTEGER := 0; ***Commented out for intentional error *** */
+       len PLS_INTEGER := NVL(LENGTH(str), 0);
+       inside_a_word BOOLEAN;
+BEGIN
+      FOR i in 1..len + 1 
+      LOOP 
+         IF ASCII(SUBSTR(str, i, 1) ) < 33 OR i > len
+           THEN 
+             IF inside_a_word
+             THEN
+                words := words + 1; 
+                inside_a_word := FALSE;
+             END IF;
+         ELSE
+           inside_a_word := TRUE;
+         END IF;
+      END LOOP;
+      RETURN words;
+END;
+/
+
+ORA-00922: missing or invalid option
+
+
+Warning: Function created with compilation errors
+
+
+Warning: Function created with compilation errors
+
+Errors for FUNCTION C##LPF_DEV.WORDCOUNT:
+
+LINE/COL ERROR
+-------- -------------------------------------------------------------------
+23/1     PLS-00103: Encountered the symbol "/" The symbol "/" was ignored.  
+
+
+Warning: Function created with compilation errors
+
+Errors for FUNCTION C##LPF_DEV.WORDCOUNT:
+
+LINE/COL ERROR
+-------- -------------------------------------------------------------------
+23/1     PLS-00103: Encountered the symbol "/" The symbol "/" was ignored.  
+
+
+Warning: Function created with compilation errors
+
+
+Warning: Function created with compilation errors
+
+
+Warning: Function created with compilation errors
+
+Errors for FUNCTION C##LPF_DEV.WORDCOUNT:
+
+LINE/COL ERROR
+-------- -------------------------------------------------------------------
+23/2     PLS-00103: Encountered the symbol "/" The symbol "/" was ignored.  
+
+Connected to Oracle Database 12c Enterprise Edition Release 12.2.0.1.0 
+Connected as C##lpf_dev@192.168.1.125/pdbstudy
+
+
+BEGIN
+     DBMS_PUTOUT.PUT_LINE('There are' ||wordcount(CHR(9))) || 'words in a tab');
+END;
+
+ORA-06550: line 2, column 60:
+PLS-00103: Encountered the symbol "|" when expecting one of the following:
+
+   := . ( % ;
+The symbol "( was inserted before "|" to continue.
+
+
+BEGIN
+     DBMS_PUTOUT.PUT_LINE('There are' || wordcount(CHR(9)) || 'words in a tab');
+END;
+
+ORA-06550: line 2, column 42:
+PLS-00905: object C##LPF_DEV.WORDCOUNT is invalid
+ORA-06550: line 2, column 6:
+PL/SQL: Statement ignored
+
+
+BEGIN
+     DBMS_PUTOUT.PUT_LINE('There are' || wordcount(CHR(9)) || 'words in a tab');
+END;
+
+ORA-06550: line 2, column 6:
+PLS-00201: identifier 'DBMS_PUTOUT.PUT_LINE' must be declared
+ORA-06550: line 2, column 6:
+PL/SQL: Statement ignored
+
+
+PL/SQL procedure successfully completed
+
+
+There arewords in a tab
+
+PL/SQL procedure successfully completed
+
+
+There arewords in a tab
+
+PL/SQL procedure successfully completed
+
+
+OBJECT_NAME                                                                      SUBOBJECT_NAME                                                                    OBJECT_ID DATA_OBJECT_ID OBJECT_TYPE             CREATED     LAST_DDL_TIME TIMESTAMP           STATUS  TEMPORARY GENERATED SECONDARY  NAMESPACE EDITION_NAME                                                                     SHARING            EDITIONABLE ORACLE_MAINTAINED APPLICATION DEFAULT_COLLATION                                                                DUPLICATED SHARDED CREATED_APPID CREATED_VSNID MODIFIED_APPID MODIFIED_VSNID
+-------------------------------------------------------------------------------- -------------------------------------------------------------------------------- ---------- -------------- ----------------------- ----------- ------------- ------------------- ------- --------- --------- --------- ---------- -------------------------------------------------------------------------------- ------------------ ----------- ----------------- ----------- -------------------------------------------------------------------------------- ---------- ------- ------------- ------------- -------------- --------------
+PK_ORG_AU_USER                                                                                                                                                         73554          73554 INDEX                   2019/8/25 0 2019/8/25 0:4 2019-08-25:00:40:27 VALID   N         N         N                  4                                                                                  NONE                           N                 N                                                                                            N          N                                                  
+ORG_AU_USER_SEQ                                                                                                                                                        73552                SEQUENCE                2019/8/25 0 2019/8/25 0:4 2019-08-25:00:40:26 VALID   N         N         N                  1                                                                                  NONE                           N                 N                                                                                            N          N                                                  
+ORG_AU_USER                                                                                                                                                            73553          73553 TABLE                   2019/8/25 0 2019/8/25 0:4 2019-08-25:00:40:27 VALID   N         N         N                  1                                                                                  NONE                           N                 N           USING_NLS_COMP                                                                   N          N                                                  
+WORDCOUNT                                                                                                                                                              73731                FUNCTION                2019/8/25 1 2019/8/25 17: 2019-08-25:17:57:00 VALID   N         N         N                  1                                                                                  NONE               Y           N                 N           USING_NLS_COMP                                                                   N          N                                                  
+
+Name              Type          Nullable Default Comments                                                                                                                                                                                                    
+----------------- ------------- -------- ------- ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- 
+OBJECT_NAME       VARCHAR2(128) Y                Name of the object                                                                                                                                                                                          
+SUBOBJECT_NAME    VARCHAR2(128) Y                Name of the sub-object (for example, partititon)                                                                                                                                                            
+OBJECT_ID         NUMBER        Y                Object number of the object                                                                                                                                                                                 
+DATA_OBJECT_ID    NUMBER        Y                Object number of the segment which contains the object                                                                                                                                                      
+OBJECT_TYPE       VARCHAR2(23)  Y                Type of the object                                                                                                                                                                                          
+CREATED           DATE          Y                Timestamp for the creation of the object                                                                                                                                                                    
+LAST_DDL_TIME     DATE          Y                Timestamp for the last DDL change (including GRANT and REVOKE) to the object                                                                                                                                
+TIMESTAMP         VARCHAR2(19)  Y                Timestamp for the specification of the object                                                                                                                                                               
+STATUS            VARCHAR2(7)   Y                Status of the object                                                                                                                                                                                        
+TEMPORARY         VARCHAR2(1)   Y                Can the current session only see data that it place in this object itself?                                                                                                                                  
+GENERATED         VARCHAR2(1)   Y                Was the name of this object system generated?                                                                                                                                                               
+SECONDARY         VARCHAR2(1)   Y                Is this a secondary object created as part of icreate for domain indexes?                                                                                                                                   
+NAMESPACE         NUMBER        Y                Namespace for the object                                                                                                                                                                                    
+EDITION_NAME      VARCHAR2(128) Y                Name of the edition in which the object is actual                                                                                                                                                           
+SHARING           VARCHAR2(18)  Y                Is this a Metadata Link, an Object Link or neither?                                                                                                                                                         
+EDITIONABLE       VARCHAR2(1)   Y                Object is considered editionable                                                                                                                                                                            
+ORACLE_MAINTAINED VARCHAR2(1)   Y                Denotes whether the object was created, and is maintained, by Oracle-supplied scripts. An object for which this has the value Y must not be changed in any way except by running an Oracle-supplied script. 
+APPLICATION       VARCHAR2(1)   Y                Denotes whether the object is part of an Application Container.                                                                                                                                             
+DEFAULT_COLLATION VARCHAR2(100) Y                Default collation for the object                                                                                                                                                                            
+DUPLICATED        VARCHAR2(1)   Y                                                                                                                                                                                                                            
+SHARDED           VARCHAR2(1)   Y                                                                                                                                                                                                                            
+CREATED_APPID     NUMBER        Y                ID of Application that created object                                                                                                                                                                       
+CREATED_VSNID     NUMBER        Y                ID of Application Version that created object                                                                                                                                                               
+MODIFIED_APPID    NUMBER        Y                ID of Application that last modified object                                                                                                                                                                 
+MODIFIED_VSNID    NUMBER        Y                ID of Application Version that last modified object                                                                                                                                                         
+
+
+SELECT * FROM USER_OBJECT T WHERE T.OBJECT_TYPE = 'FUNCTION'
+
+ORA-00942: table or view does not exist
+
+
+OBJECT_NAME                                                                      SUBOBJECT_NAME                                                                    OBJECT_ID DATA_OBJECT_ID OBJECT_TYPE             CREATED     LAST_DDL_TIME TIMESTAMP           STATUS  TEMPORARY GENERATED SECONDARY  NAMESPACE EDITION_NAME                                                                     SHARING            EDITIONABLE ORACLE_MAINTAINED APPLICATION DEFAULT_COLLATION                                                                DUPLICATED SHARDED CREATED_APPID CREATED_VSNID MODIFIED_APPID MODIFIED_VSNID
+-------------------------------------------------------------------------------- -------------------------------------------------------------------------------- ---------- -------------- ----------------------- ----------- ------------- ------------------- ------- --------- --------- --------- ---------- -------------------------------------------------------------------------------- ------------------ ----------- ----------------- ----------- -------------------------------------------------------------------------------- ---------- ------- ------------- ------------- -------------- --------------
+WORDCOUNT                                                                                                                                                              73731                FUNCTION                2019/8/25 1 2019/8/25 17: 2019-08-25:17:57:00 VALID   N         N         N                  1                                                                                  NONE               Y           N                 N           USING_NLS_COMP                                                                   N          N                                                  
+
+
+OBJECT_NAME   SUBOBJECT_NAME                                                                    OBJECT_ID DATA_OBJECT_ID OBJECT_TYPE             CREATED     LAST_DDL_TIME TIMESTAMP           STATUS  TEMPORARY GENERATED SECONDARY  NAMESPACE EDITION_NAME                                                                     SHARING            EDITIONABLE ORACLE_MAINTAINED APPLICATION DEFAULT_COLLATION                                                                DUPLICATED SHARDED CREATED_APPID CREATED_VSNID MODIFIED_APPID MODIFIED_VSNID
+------------- -------------------------------------------------------------------------------- ---------- -------------- ----------------------- ----------- ------------- ------------------- ------- --------- --------- --------- ---------- -------------------------------------------------------------------------------- ------------------ ----------- ----------------- ----------- -------------------------------------------------------------------------------- ---------- ------- ------------- ------------- -------------- --------------
+WORDCOUNT                                                                                           73731                FUNCTION                2019/8/25 1 2019/8/25 17: 2019-08-25:17:57:00 VALID   N         N         N                  1                                                                                  NONE               Y           N                 N           USING_NLS_COMP                                                                   N          N                                                  
+
+Parameter Type           Mode Default? 
+--------- -------------- ---- -------- 
+(RESULT)  BINARY_INTEGER               
+STR       VARCHAR2       IN            
+
+Warning: connection was lost and re-established
+
+Grant succeeded
+
+
+DUMMY
+-----
+X
+
+
+Grant succeeded
+
+
+TABLE_NAME                                                                       GRANTEE                                                                          PRIVILEGE
+-------------------------------------------------------------------------------- -------------------------------------------------------------------------------- ----------------------------------------
+WORDCOUNT                                                                        C##LPF                                                                           EXECUTE
+C##LPF_DEV                                                                       PUBLIC                                                                           INHERIT PRIVILEGES
+
+
+TABLE_NAME           GRANTEE                                                                          PRIVILEGE
+-------------------- -------------------------------------------------------------------------------- --------------------
+WORDCOUNT            C##LPF                                                                           EXECUTE
+C##LPF_DEV           PUBLIC                                                                           INHERIT PRIVILEGES
+
