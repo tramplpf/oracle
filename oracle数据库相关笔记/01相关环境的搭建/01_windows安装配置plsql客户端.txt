@@ -4,3 +4,34 @@ ORACLE_HOME，以及TNS_ADMIN
 其中ORACLE_HOME的取值是D:\app\product\11.2.0\dbhome_1 这里是oracle软件安装的目录。
 而 TNS_ADMIN 的路径是 D:\app\product\11.2.0\dbhome_1\NETWORK\ADMIN\ 该目录是tnsadmins.ora 文件所在的目录 
 
+
+
+
+
+window10 上安装oracle12的客户端：
+注意： windows10 中plsql即时连接oracle12c 64位，使用的也是32位的instance client。 
+从oracle官方网站下载 oracle12c 32位的客户端软件，
+oracle12c 32位客户端软件的下载地址：
+https://download.oracle.com/otn/nt/instantclient/122010/instantclient-basic-nt-12.2.0.1.0.zip
+
+https://download.oracle.com/otn/nt/instantclient/122010/instantclient-basiclite-nt-12.2.0.1.0.zip
+
+https://download.oracle.com/otn/nt/instantclient/122010/instantclient-sqlplus-nt-12.2.0.1.0.zip 
+
+https://download.oracle.com/otn/nt/instantclient/122010/instantclient-tools-nt-12.2.0.1.0.zip
+
+
+根据上面的下载地址，只需要下载第一个和第三个文件， 并且将他们解压缩后放在同一个文件目录下，然后在可执行文件所在的目录下创建network/admin 文件夹。 
+之后配置ORACLE_HOME 为sqplus.exe 所在的文件夹， 
+配置TNS_ADMIN 为 network/admin 所在文件夹，
+然后将tnsname.ora 文件保存到 network/admin 目录下， 
+然后，打开plsql 客户软件，
+进入之后点击 Tools---> preferences --> 选择 Oracle--》 connection 下面的 
+Oracle Home(empty is autodetect) 的取值为 之前OARCLE_HOME 的取值D:\software\oracle\oracle12c\instantclient12c_32\instantclient_12_2
+
+OCI library 的取值为：
+D:\software\oracle\oracle12c\instantclient12c_32\instantclient_12_2\oci.dll
+
+之后重启，plsql 客户端。 就可以在登录页面看到我们在tnsname.ora 文件中定义的 连接标识符。 
+
+

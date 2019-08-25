@@ -1,0 +1,19 @@
+Xshell连接SqlPlus无法使用退格、删除键 
+
+问题：在使用xshell连接CentOS7，进入SQLPLUS进行命令操作时，如果输错了信息，无法进行退格键删除（显示“^H”），同样按删除键，显示“^[[3~”。
+
+解决方法：
+
+方法一：
+打开xshell 中定义的对应的会话，打开该会话的属性。 
+点击 "终端" 下面的 "键盘" ， 修改 DELETE 键序列 为 ASCII 127(Ctrl + ？)(A) 
+修改 BACKSPACE键序列为 ASCII 127(ctrl+?)(I) 
+
+
+
+方法二：
+使用ctrl+backspace即可
+
+
+方法三：
+通过命令行 $> stty erase ^H

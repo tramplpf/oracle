@@ -1,0 +1,32 @@
+oracle12c 客户端软件介绍(64位)
+
+Basic Package
+ 	软件名: instantclient-basic-windows.x64-12.2.0.1.0.zip
+ 	软件描述: All files required to run OCI, OCCI, and JDBC:OCI applications The 12.2 Basic package requires the Microsoft Visual Studio 2013 Redistributable.
+ 	软件下载地址： https://download.oracle.com/otn/nt/instantclient/122010/instantclient-basic-windows.x64-12.2.0.1.0.zip
+
+Basic Light Package  
+	软件名： instantclient-basiclite-windows.x64-12.2.0.1.0.zip
+	软件描述： Smaller version of the Basic package, with only English error messages and Unicode, ASCII, and Western European character set support (37,128,586 bytes) (cksum - 865082268)      The 12.2 Basic Light package requires the Microsoft Visual Studio 2013 Redistributable.
+	软件下载地址： https://download.oracle.com/otn/nt/instantclient/122010/instantclient-basiclite-windows.x64-12.2.0.1.0.zip
+
+SQL*Plus Package： 
+	软件名 instantclient-sqlplus-windows.x64-12.2.0.1.0.zip 	
+	软件描述：　The SQL*Plus command line tool for SQL and PL/SQL queries
+	软件下载地址：https://download.oracle.com/otn/nt/instantclient/122010/instantclient-sqlplus-windows.x64-12.2.0.1.0.zip
+
+Tools Package：
+	软件名： instantclient-tools-windows.x64-12.2.0.1.0.zip 
+	软件描述：Includes Data Pump, SQL*Loader and Workload Replay Client 
+	软件下载地址： https://download.oracle.com/otn/nt/instantclient/122010/instantclient-tools-windows.x64-12.2.0.1.0.zip 
+
+
+oracle12c 32位客户端软件的下载地址：
+https://download.oracle.com/otn/nt/instantclient/122010/instantclient-basic-nt-12.2.0.1.0.zip
+
+https://download.oracle.com/otn/nt/instantclient/122010/instantclient-basiclite-nt-12.2.0.1.0.zip
+
+https://download.oracle.com/otn/nt/instantclient/122010/instantclient-sqlplus-nt-12.2.0.1.0.zip 
+
+https://download.oracle.com/otn/nt/instantclient/122010/instantclient-tools-nt-12.2.0.1.0.zip
+

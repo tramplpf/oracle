@@ -1,0 +1,6 @@
+台式机中oracle数据库的一些信息
+
+创建了一个用户 c##lpf_dev, 密码 lpf_dev. 
+
+
+要在数据库中创建一个和权限管理相关的表格，对应的pdm保存在 D:\github\tramplpf\oracle\比较经典的数据库表格\权限管理模块\Project_权限管理模块 目录下。 
