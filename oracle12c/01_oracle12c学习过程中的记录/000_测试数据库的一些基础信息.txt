@@ -1,0 +1,6 @@
+自己搭建的oracle12c的测试环境中的一些基础信息 
+
+
+C##lpf_dev/lpf_dev
+pdblpf/lpflpf
+
