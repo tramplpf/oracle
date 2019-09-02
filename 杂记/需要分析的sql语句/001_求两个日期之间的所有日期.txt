@@ -1,0 +1,6 @@
+--oracle 求两个日期之间的所有日期
+
+SELECT TO_CHAR((TO_DATE(KSRQ, 'yyyy-MM-dd') + (ROWNUM - 1)), 'yyyy-MM-dd') DT
+  FROM DUAL
+CONNECT BY ROWNUM <=
+           (TO_DATE(JSRQ, 'yyyy-MM-dd') - TO_DATE(KSRQ, 'yyyy-MM-dd') + 1)
