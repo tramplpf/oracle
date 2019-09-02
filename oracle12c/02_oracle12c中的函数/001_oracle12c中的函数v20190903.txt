@@ -1,0 +1,60 @@
+001_oracle12c中的函数v20190903
+
+abs() 函数：
+	求一个数字或者可以隐式转换为数字的非数字类型的绝对值。 
+	
+	比如：
+SELECT ABS(12) FROM DUAL; -- 12 
+SELECT ABS(-12) FROM DUAL; -- 12
+SELECT ABS(-012) FROM DUAL; -- 12 
+SELECT ABS('0876') FROM DUAL; -- 876
+SELECT ABS('-098') FROM DUAL; -- 098 
+
+SELECT ABS(SYSDATE) FROM DUAL; -- 报错
+这里本来认为Date类型在数据库中存储的是一个数字，在这里获取可以被当成数字来处理，
+但是实际上却没有被当成数字来处理。 报错 ORA-00932 
+
+
+acos 函数:
+该函数返回一个取值的cosin 值，它参数的取值范围是-1到1. 并且返回值在0到pi 之间。
+如果参数类型是binary_float 类型，那么函数返回值的类型时 binary_double 类型。 
+如果参数类型时其他数字类型，那么函数返回值是对应的数字类型。
+
+SELECT ACOS(-1) FROM DUAL; -- 3.14159265358979 
+SELECT ACOS(1) FROM DUAL; -- 0
+SELECT ACOS(0) FROM DUAL; --1.5707963267949
+SELECT ACOS('0') FROM DUAL; --1.5707963267949
+
+SELECT ACOS(2) FROM DUAL; -- 报错 ORA-00900
+
+SELECT ACOS(.3) FROM DUAL; --1.2661036727795
+SELECT ACOS(0.3) FROM DUAL; --1.2661036727795
+
+
+add_months(date, integer)
+该函数返回 date 类型加上整数月。 
+一个月的定义是在会话级参数 NLS_CALENDAR 来决定的。 
+函数的参数date 可以是任何date类型的数据或者datetime类型的数据。 返回值一般
+是DATE类型。 
+
+
+查询会话级参数的取值：
+select sys_context('USERENV','NLS_CALENDAR') from dual;  -- 当前数据库的取值是  GREGORIAN 
+
+SELECT SYSDATE FROM dual;   -- 2019/9/3 5:46:15
+SELECT add_months(SYSDATE, 1) FROM dual; -- 2019/10/3 5:46:15
+SELECT add_months(to_date('2019-08-10', 'yyyy-mm-dd'), 1) FROM dual;  -- 2019/9/10
+-- 2019年的二月份只有28天 
+SELECT to_date('2019-01-29', 'yyyy-mm-dd') FROM dual;   -- 2019/1/29 
+SELECT add_months(to_date('2019-01-29', 'yyyy-mm-dd'), 1) FROM dual;  -- 2019/2/28  这里得到的是20190228，而不是不存在的20190229，也不是20190301 
+SELECT add_months(to_date('2019-01-29', 'yyyy-mm-dd'), 2) FROM dual;  --2019/3/29 
+
+SELECT add_months(to_date('2019-02-29', 'yyyy-mm-dd'), 12) FROM dual;  
+
+
+
+
+
+
+
+
