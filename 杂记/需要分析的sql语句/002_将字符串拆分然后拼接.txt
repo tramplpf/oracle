@@ -4,5 +4,5 @@ select regexp_substr() kmdm from dual
 connect by rownum <= length(P_I_ADDSTOCK) - 
 		LENGTH(replace(p_i_addstock, ',', '') +1) A  
 		where a.kmdm is not null
-		and trim (a.kmdm) is not null;
+		and trim (a.kmdm) is not
 );
