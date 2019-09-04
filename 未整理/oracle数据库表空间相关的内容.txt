@@ -1,0 +1,41 @@
+select tablespace_name,sum(bytes)/1024/1024 from dba_free_space group by tablespace_name;
+
+
+
+
+-- 查看表空间的使用情况  (经过测试，发现不能使用)
+select a.tablespace_name as "表空间名",
+       a.bytes / 1024 / 1024 as "表空间大小(M)",
+       (a.bytes - b.bytes) / 1024 / 1024 as "已使用空间(M)",
+       b.bytes / 1024 / 1024 "空闲空间(M)",
+       round(((a.bytes - b.bytes) / a.bytes) * 100, 2) "使用比"
+  from (select tablespace_name, sum(bytes) bytes
+          from dba_data_files
+         group by tablespace_name) a,
+       (select tablespace_name, sum(bytes) bytes, max(bytes) largest
+          from dba_free_space
+         group by tablespace_name) b
+ where a.tablespace_name = b.tablespace_name
+ order by ((a.bytes - b.bytes) / a.bytes) desc;
+
+
+select
+　　b.file_name 物理文件名,
+　　b.tablespace_name 表空间,
+　　b.bytes/1024/1024 大小M,
+　　(b.bytes-sum(nvl(a.bytes,0)))/1024/1024 已使用M,
+　　substr((b.bytes-sum(nvl(a.bytes,0)))/(b.bytes)*100,1,5) 利用率
+　　from dba_free_space a,dba_data_files b
+　　where a.file_id=b.file_id
+　　group by b.tablespace_name,b.file_name,b.bytes
+　　order by b.tablespace_name
+
+
+
+-- 查看表表空间对应的磁盘存储位置
+select t1.name,t2.name  from v$tablespace t1,v$datafile t2 where t1.ts# = t2.ts#;
+select t1.name,t2.name  from v$tablespace t1,v$datafile t2 where t1.ts# = t2.ts# and t1.name = 'EXAMPLE'
+
+
+https://zhidao.baidu.com/question/495719886769895804.html
+
