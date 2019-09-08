@@ -1,0 +1,1 @@
+在sqlplus中，通过执行 set timing on 然后，执行相关的sql，可以在sql执行结束之后，统计sql的执行时长。 
