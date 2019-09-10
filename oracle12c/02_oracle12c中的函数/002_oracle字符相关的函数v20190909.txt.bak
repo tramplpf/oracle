@@ -1,0 +1,11 @@
+1. ascii() 函数  
+		思考： 使用ascii() 获取一个表中，指定字段以固定字母开头的的记录  where ascii(变量名) = ascii('a') 
+		和  where  变量名 like 'a%'; 这两种写法，那个的效率高点？？  
+		select * from amc_au_user t where t.real_name like '李%'；
+		select * from amc_au_user t where ascii(real_name) = ascii('李');
+		上面两句sql的执行计划一样。 
+		使用  name like 'aaa%';  如果name上面建有索引的话，在查询的时候，会走索引。 
+		
+		
+		
+2.  instr()
