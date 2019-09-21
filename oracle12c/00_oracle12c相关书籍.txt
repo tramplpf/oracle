@@ -1,0 +1,4 @@
+oracle12c相关书籍
+《Oracle Database 12cR2 In-Memory性能优化实战》		实现数据库极限性能的技术建议和前沿方法
+
+
