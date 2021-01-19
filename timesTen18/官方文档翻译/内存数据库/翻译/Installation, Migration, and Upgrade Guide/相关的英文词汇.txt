@@ -1,0 +1,26 @@
+相关的英文词汇
+designate		指定
+multibyte		多字节
+sufficient		足够的
+
+populates		填充
+involved		参与
+downgrading		降级
+prerequisites	先决条件
+capabilities	功能
+estimate		估计
+concerns		关注
+contention		争夺
+contiguous		邻近的
+encounter		遭遇
+
+
+
+
+
+必知必会的词汇
+throughput		吞吐量
+immutable		一成不变的
+system overhead 系统开销
+insensitive		麻木的，不敏感的。 
+

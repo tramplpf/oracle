@@ -1,0 +1,11 @@
+Operations 一书中的英文词汇
+
+resolution 解析
+defragmenting  碎片整理
+verifying 验证
+subsequent connections	后续连接
+
+transient	短暂的
+external	外部的
+parentheses	括号
+backslash	反斜线

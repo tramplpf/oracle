@@ -1,0 +1,2 @@
+需要做的实验.tasks
+1. 在linux上面创建 NAS(Network Attached Storage) 来创建一个安装，然后在多个主机上面创建实例(在创建实例的时候，分别采用不同的用户名进行尝试)

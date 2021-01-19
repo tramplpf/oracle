@@ -1,0 +1,3 @@
+database-reference-1.pdf    这本书对oracle12中的各种参数做了详细的讲解。 
+
+error-messages-1.pdf      介绍oracle12c中各种错误造成的原因。

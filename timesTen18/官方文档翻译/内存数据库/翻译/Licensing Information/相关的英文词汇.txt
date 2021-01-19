@@ -1,0 +1,15 @@
+相关的英文词汇
+
+Notices 通告
+Scaleout 向外扩展
+Analytics 分析 
+application-tier 应用层
+Transparent 透明
+elasticity 弹性
+
+
+
+
+专用术语：
+transparent elasticity 
+

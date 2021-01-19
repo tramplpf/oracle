@@ -1,0 +1,13 @@
+oracle数据导入规则_v20200907
+1. 小行小列：sql语句
+2. 小行多列：sql脚本
+3. 多行：PL/SQL 
+4. 小量数据：plsql developer 
+5. 大量数据：imp/exp 
+	使用imp/exp 本质是生成逻辑导入(G级别)
+	5.1 客户端sqlplus需要和oracle server的版本保持一致
+	5.2 版本不一致的时候，需要升级sqlplus的版本
+	5.3 时间紧急的情况下：借道
+6. 超大量数据(dump文件): impdp/expdp
+	前提：dump文件需要位于数据库服务器上
+	超大量数据(文本文件)sql*loader 
